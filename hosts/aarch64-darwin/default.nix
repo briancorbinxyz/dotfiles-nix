@@ -68,11 +68,13 @@
     # CLI tools that work better via Homebrew on macOS
     brews = [
       "asdf"
+      "gemini-cli"
+      "mas"
+      "node"
+      "pixi"
       "pyenv"
       "rust"
       "terraform"
-      "node"
-      "pixi"
     ];
 
     # GUI applications
