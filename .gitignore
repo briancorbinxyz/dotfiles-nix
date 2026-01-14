@@ -1,0 +1,18 @@
+# Nix
+result
+result-*
+.direnv/
+
+# Editor
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (if any)
+secrets/
+*.local.nix
