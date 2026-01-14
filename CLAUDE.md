@@ -33,11 +33,11 @@ home-manager switch --flake ~/dotfiles-nix#aarch64-linux
 ### Development
 
 ```bash
-# Enter dev shell with git and nixfmt-classic
+# Enter dev shell with git and nixfmt
 nix develop
 
 # Format Nix files
-nixfmt-classic <file.nix>
+nixfmt <file.nix>
 ```
 
 ## Architecture

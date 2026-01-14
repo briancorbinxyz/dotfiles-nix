@@ -22,7 +22,7 @@
       shellcheck
       shfmt
       nodePackages.prettier
-      nixfmt-classic
+      nixfmt
 
       # Build tools needed by some plugins
       gcc

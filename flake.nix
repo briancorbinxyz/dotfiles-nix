@@ -93,7 +93,7 @@
         let pkgs = pkgsFor system;
         in {
           default = pkgs.mkShell {
-            buildInputs = with pkgs; [ git nixfmt-classic ];
+            buildInputs = with pkgs; [ git nixfmt ];
           };
         }
       );
