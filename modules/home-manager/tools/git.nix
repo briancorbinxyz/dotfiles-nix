@@ -3,12 +3,14 @@
 {
   programs.git = {
     enable = true;
-    userName = user.fullName;
-    userEmail = user.email;
-
     lfs.enable = true;
 
-    extraConfig = {
+    settings = {
+      user = {
+        name = user.fullName;
+        email = user.email;
+      };
+
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = true;
@@ -17,25 +19,15 @@
       diff.colorMoved = "default";
 
       core.editor = "nvim";
-    };
 
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        light = false;
-        side-by-side = true;
-        line-numbers = true;
+      alias = {
+        co = "checkout";
+        br = "branch";
+        ci = "commit";
+        st = "status";
+        unstage = "reset HEAD --";
+        last = "log -1 HEAD";
       };
-    };
-
-    aliases = {
-      co = "checkout";
-      br = "branch";
-      ci = "commit";
-      st = "status";
-      unstage = "reset HEAD --";
-      last = "log -1 HEAD";
     };
 
     ignores = [
@@ -48,6 +40,17 @@
       ".env.local"
       ".claude/settings.local.json"
     ];
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      light = false;
+      side-by-side = true;
+      line-numbers = true;
+    };
   };
 
   programs.gh = {

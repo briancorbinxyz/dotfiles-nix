@@ -10,7 +10,7 @@
     # Window
     window-padding-x = 10
     window-padding-y = 10
-    window-decoration = false
+    window-decoration = true
     background-opacity = 0.7
     background-blur-radius = 20
 

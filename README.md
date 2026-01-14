@@ -10,16 +10,28 @@ Cross-platform dotfiles managed with Nix flakes and home-manager.
 | `x86_64-linux` | Intel/AMD Linux | standalone home-manager |
 | `aarch64-linux` | ARM Linux (Pi, etc.) | standalone home-manager |
 
+## Installation
+
+To use these dotfiles, you need to have [Nix](https://nixos.org/) installed. If you don't have Nix installed, you can install it using the recommended multi-user setup:
+
+```bash
+sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+```
+
+After installation, please restart your terminal or source your shell configuration file (e.g., `source ~/.zshrc` or `source ~/.bashrc`) to ensure Nix is properly initialized in your environment.
+
 ## Usage
 
 ### macOS (nix-darwin)
 
+**Note:** Nix Darwin system activation commands must be run with `sudo` and typically require `--extra-experimental-features "nix-command flakes"`.
+
 ```bash
 # First time setup
-nix run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin
+sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin
 
 # Subsequent updates
-darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin
+sudo darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin
 ```
 
 ### Linux (standalone home-manager)
