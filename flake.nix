@@ -54,13 +54,16 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.${user.name} = { ... }: {
+              extraSpecialArgs = { inherit inputs user; };
+              users.briancorbin = { pkgs, lib, ... }: {
                 imports = commonHomeModules ++ [
                   ./modules/home-manager/packages/darwin.nix
                 ];
+                xdg.configFile."gh/config.yml".force = lib.mkForce true;
+                xdg.configFile."atuin/config.toml".force = lib.mkForce true;
               };
-              extraSpecialArgs = { inherit inputs user; };
             };
+            users.users.briancorbin.home = "/Users/briancorbin";
           }
         ];
       };

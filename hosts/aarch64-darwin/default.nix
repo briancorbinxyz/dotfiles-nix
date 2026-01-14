@@ -4,6 +4,8 @@
   system.stateVersion = 5;
   nixpkgs.hostPlatform = "aarch64-darwin";
 
+  system.primaryUser = "briancorbin";
+
   nix = {
     settings = {
       experimental-features = "nix-command flakes";

@@ -17,11 +17,6 @@
       diff.colorMoved = "default";
 
       core.editor = "nvim";
-    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
-      credential = {
-        "https://github.com".helper = "!/opt/homebrew/bin/gh auth git-credential";
-        "https://gist.github.com".helper = "!/opt/homebrew/bin/gh auth git-credential";
-      };
     };
 
     delta = {
