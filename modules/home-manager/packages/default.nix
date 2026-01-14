@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     # Shell/Terminal tools
     atuin
+    pay-respects
     tmux
     zoxide
 

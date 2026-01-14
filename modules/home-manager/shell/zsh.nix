@@ -49,7 +49,7 @@ in
 
       # Initialize tools
       eval "$(zoxide init zsh)"
-      eval "$(thefuck --alias)"
+      eval "$(pay-respects zsh --alias oops)"
       eval "$(atuin init zsh)"
 
       # FZF configuration
