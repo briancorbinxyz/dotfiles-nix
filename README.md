@@ -22,30 +22,30 @@ After installation, please restart your terminal or source your shell configurat
 
 ## Usage
 
-### macOS (nix-darwin)
-
-**Note:** Nix Darwin system activation commands must be run with `sudo` and typically require `--extra-experimental-features "nix-command flakes"`.
-
+After initial setup, use the cross-platform aliases:
 ```bash
-# First time setup
+nix-init      # First time setup
+nix-rebuild   # Subsequent updates
+```
+
+### Manual Commands
+
+**macOS (nix-darwin)**:
+```bash
+# First time (requires sudo and experimental features)
 sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin
 
 # Subsequent updates
 sudo darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin
 ```
 
-### Linux (standalone home-manager)
-
+**Linux (standalone home-manager)** - auto-detects architecture:
 ```bash
-# First time setup (x86_64)
-nix run home-manager/master -- switch --flake ~/dotfiles-nix#x86_64-linux
-
-# First time setup (aarch64)
-nix run home-manager/master -- switch --flake ~/dotfiles-nix#aarch64-linux
+# First time
+nix run home-manager/master -- switch --flake ~/dotfiles-nix#$(uname -m)-linux
 
 # Subsequent updates
-home-manager switch --flake ~/dotfiles-nix#x86_64-linux
-home-manager switch --flake ~/dotfiles-nix#aarch64-linux
+home-manager switch --flake ~/dotfiles-nix#$(uname -m)-linux
 ```
 
 ## Structure
@@ -69,13 +69,13 @@ dotfiles-nix/
 ## What's Managed
 
 ### Via Nix (all platforms)
-- Shell tools: atuin, bat, fd, fzf, git, gh, jq, lsd, ripgrep, thefuck, tmux, yq, zoxide
+- Shell tools: atuin, bat, fd, fzf, git, gh, jq, lsd, pay-respects, ripgrep, tmux, yq, zoxide
 - Development: grpcurl, httpie, websocat, hyperfine, bitwarden-cli
 - Editor: Neovim with LSP dependencies
 
 ### Via Homebrew (macOS only)
 - GUI apps: Alacritty, Ghostty, Docker Desktop, VS Code, Obsidian, etc.
-- Tools better via Homebrew: asdf, pyenv, rust, terraform, node
+- CLI tools: asdf, gemini-cli, mas, node, pixi, pyenv, rust, terraform
 - Fonts: MesloLGS Nerd Font
 
 ### Dotfiles (managed via home-manager)

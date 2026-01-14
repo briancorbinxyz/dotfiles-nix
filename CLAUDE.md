@@ -10,24 +10,24 @@ Cross-platform dotfiles repository using **Nix flakes** with **home-manager** an
 
 ### Apply Configuration
 
-**macOS (nix-darwin + home-manager)**:
+After initial setup, use the cross-platform aliases:
 ```bash
-# First time setup
-sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin
-
-# Subsequent updates
-sudo darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin
+nix-init      # First time setup
+nix-rebuild   # Subsequent updates
 ```
 
-**Linux (standalone home-manager)**:
-```bash
-# First time setup
-nix run home-manager/master -- switch --flake ~/dotfiles-nix#x86_64-linux
-nix run home-manager/master -- switch --flake ~/dotfiles-nix#aarch64-linux
+**Manual commands (if aliases unavailable)**:
 
-# Subsequent updates
-home-manager switch --flake ~/dotfiles-nix#x86_64-linux
-home-manager switch --flake ~/dotfiles-nix#aarch64-linux
+macOS:
+```bash
+sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin  # first time
+sudo darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin  # updates
+```
+
+Linux (auto-detects x86_64/aarch64):
+```bash
+nix run home-manager/master -- switch --flake ~/dotfiles-nix#$(uname -m)-linux  # first time
+home-manager switch --flake ~/dotfiles-nix#$(uname -m)-linux  # updates
 ```
 
 ### Development
@@ -75,4 +75,4 @@ Uses **LazyVim** framework. Custom plugins defined in `dotfiles/nvim/lua/plugins
 
 ### Shell Integration
 
-Zsh is primary shell with oh-my-zsh + powerlevel10k. Tool integrations (zoxide, atuin, fzf, thefuck) configured in `modules/home-manager/shell/zsh.nix`. Modern aliases (bat→cat, lsd→ls) in `aliases.nix`.
+Zsh is primary shell with oh-my-zsh + powerlevel10k. Tool integrations (zoxide, atuin, fzf, pay-respects) configured in `modules/home-manager/shell/zsh.nix`. Modern aliases (bat→cat, lsd→ls) in `aliases.nix`.
