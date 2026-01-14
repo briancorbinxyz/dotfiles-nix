@@ -13,9 +13,6 @@
   # Terraform
   tf = "terraform";
 
-  # thefuck
-  ugh = "fuck";
-
   # Git shortcuts
   g = "git";
   ga = "git add";
@@ -59,9 +56,17 @@
   copy = "pbcopy";
   paste = "pbpaste";
   ports = "lsof -i -P -n | grep LISTEN";
+
+  # Nix rebuild
+  nix-init = "sudo nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin";
+  nix-rebuild = "sudo darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin";
 } // lib.optionalAttrs pkgs.stdenv.isLinux {
   # Linux-specific aliases
   copy = "xclip -selection clipboard";
   paste = "xclip -selection clipboard -o";
   ports = "ss -tuln";
+
+  # Nix rebuild (auto-detects x86_64 or aarch64)
+  nix-init = "nix run home-manager/master -- switch --flake ~/dotfiles-nix#$(uname -m)-linux";
+  nix-rebuild = "home-manager switch --flake ~/dotfiles-nix#$(uname -m)-linux";
 }
