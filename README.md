@@ -12,13 +12,27 @@ Cross-platform dotfiles managed with Nix flakes and home-manager.
 
 ## Installation
 
-To use these dotfiles, you need to have [Nix](https://nixos.org/) installed. If you don't have Nix installed, you can install it using the recommended multi-user setup:
+### Quick Install (recommended)
+
+Run the bootstrap script - it handles everything (Nix, cloning, configuration):
 
 ```bash
-sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+curl -fsSL https://raw.githubusercontent.com/briancorbinxyz/dotfiles-nix/main/install.sh | bash
 ```
 
-After installation, please restart your terminal or source your shell configuration file (e.g., `source ~/.zshrc` or `source ~/.bashrc`) to ensure Nix is properly initialized in your environment.
+### Manual Install
+
+1. Install [Nix](https://nixos.org/):
+```bash
+sh <(curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix) install
+```
+
+2. Clone and apply:
+```bash
+git clone https://github.com/briancorbinxyz/dotfiles-nix.git ~/dotfiles-nix
+cd ~/dotfiles-nix
+# Then run nix-init command for your platform (see Usage below)
+```
 
 ## Usage
 
