@@ -48,9 +48,6 @@
   # Config editing
   zshrc = "nvim ~/.zshrc";
   reload = "source ~/.zshrc";
-
-  # Markdown files open with bat
-  ".md" = "bat";
 } // lib.optionalAttrs pkgs.stdenv.isDarwin {
   # macOS-specific aliases
   copy = "pbcopy";

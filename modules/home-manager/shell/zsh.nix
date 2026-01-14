@@ -105,6 +105,13 @@ in
 
         # Dotfiles alias (bare git repo)
         alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
+        # Suffix aliases (open file by typing filename)
+        alias -s md=bat
+        alias -s json=bat
+        alias -s yaml=bat
+        alias -s yml=bat
+        alias -s txt=bat
       ''
     ];
   };
