@@ -27,6 +27,7 @@
     httpie
     websocat
     hyperfine
+    opencode
 
     # Security
     bitwarden-cli

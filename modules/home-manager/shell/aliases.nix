@@ -45,6 +45,9 @@
   fzf = "fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'";
   vf = "nvim $(fd --type f | fzf --preview 'bat --color=always {}')";
 
+  # AI coding assistants
+  o = "opencode";
+
   # Config editing
   zshrc = "nvim ~/.zshrc";
   reload = "source ~/.zshrc";
