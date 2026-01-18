@@ -25,6 +25,16 @@
   amend = "git commit --amend --no-edit";
   wip = "git add -A && git commit -m 'WIP'";
 
+  # Tmux
+  tm = "tmux";
+  tma = "tmux attach-session";
+  tmat = "tmux attach-session -t";
+  tmks = "tmux kill-session -a";
+  tml = "tmux list-sessions";
+  tmn = "tmux new-session";
+  tmns = "tmux new -s";
+  tms = "tmux new-session -s";
+
   # Docker
   d = "docker";
   dc = "docker compose";

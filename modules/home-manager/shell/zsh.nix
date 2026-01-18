@@ -88,9 +88,44 @@ in
           local name="$(_nvim_title)"
           nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal claude' -c 'split | terminal claude'
         }
+        nvc22() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal claude' -c 'vsplit | terminal claude' -c 'wincmd h | split | terminal claude' -c 'wincmd l | split | terminal claude'
+        }
         nvc4() {
           local name="$(_nvim_title)"
           nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'terminal claude' -c 'vsplit | terminal claude' -c 'split | terminal claude' -c 'wincmd h | split | terminal claude'
+        }
+        tnvc() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}"
+          tmux new-session -d -s "$session" 'nvim .'
+          tmux split-window -t "$session" -h -l 50% 'claude'
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
+        }
+        tnvc2() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}"
+          tmux new-session -d -s "$session" 'nvim .'
+          tmux split-window -t "$session" -h -l 50% 'claude'
+          tmux split-window -t "$session" -v 'claude'
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
+        }
+        tnvc4() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}"
+          tmux new-session -d -s "$session" 'nvim .'
+          tmux split-window -t "$session" -h -l 66% 'claude'
+          tmux split-window -t "$session" -h -l 50% 'claude'
+          tmux select-pane -t "$session" -L
+          tmux split-window -t "$session" -v 'claude'
+          tmux select-pane -t "$session" -R
+          tmux split-window -t "$session" -v 'claude'
+          tmux select-pane -t "$session" -L
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
         }
 
         ${lib.optionalString pkgs.stdenv.isDarwin ''
