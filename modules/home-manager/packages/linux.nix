@@ -13,5 +13,8 @@
     # Clipboard utilities
     xclip
     xdg-utils
+
+    # AI (on macOS installed via Homebrew cask)
+    ollama
   ];
 }

@@ -29,6 +29,9 @@
     hyperfine
     opencode
 
+    # AI
+    aichat
+
     # Security
     bitwarden-cli
 

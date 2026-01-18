@@ -80,6 +80,7 @@
     # GUI applications
     casks = [
       "alacritty"
+      "claude"
       "claude-code"
       "docker-desktop"
       "dropbox"
@@ -88,6 +89,7 @@
       "github"
       "google-chrome"
       "obsidian"
+      "ollama"
       "visual-studio-code"
       "zoom"
       "zotero"
