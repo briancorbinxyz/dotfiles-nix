@@ -5,7 +5,7 @@
   xdg.configFile."ghostty/config".text = ''
     # Font
     font-family = MesloLGS Nerd Font Mono
-    font-size = ${if pkgs.stdenv.isDarwin then "18" else "14"}
+    font-size = ${if pkgs.stdenv.isDarwin then "14" else "12"}
 
     # Window
     window-padding-x = 10

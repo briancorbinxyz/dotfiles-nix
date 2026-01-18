@@ -24,7 +24,7 @@
 
     [font]
     normal.family = "MesloLGS Nerd Font Mono"
-    size = ${if pkgs.stdenv.isDarwin then "18" else "14"}
+    size = ${if pkgs.stdenv.isDarwin then "14" else "12"}
 
     [colors.primary]
     background = "#1a1b26"

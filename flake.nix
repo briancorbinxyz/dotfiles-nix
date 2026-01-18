@@ -13,6 +13,11 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zsh-pomodoro-p10k = {
+      url = "path:/Users/briancorbin/Documents/GitHub/zsh-pomodoro-p10k";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, nix-darwin, ... }:

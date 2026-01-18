@@ -1,4 +1,4 @@
-{ config, pkgs, lib, user, ... }:
+{ config, pkgs, lib, user, inputs, ... }:
 
 let
   aliases = import ./aliases.nix { inherit pkgs lib; };
@@ -31,6 +31,11 @@ in
         name = "powerlevel10k";
         src = pkgs.zsh-powerlevel10k;
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      }
+      {
+        name = "zsh-pomodoro-p10k";
+        src = inputs.zsh-pomodoro-p10k;
+        file = "zsh-pomodoro-p10k.plugin.zsh";
       }
     ];
 

@@ -60,7 +60,21 @@
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "zsh-pomodoro-p10k": "zsh-pomodoro-p10k"
+      }
+    },
+    "zsh-pomodoro-p10k": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768693942,
+        "narHash": "sha256-kvaRkXnDC+9fdqaplKAv6DC1O4lTrojHptTGVPWi7pU=",
+        "path": "/Users/briancorbin/Documents/GitHub/zsh-pomodoro-p10k",
+        "type": "path"
+      },
+      "original": {
+        "path": "/Users/briancorbin/Documents/GitHub/zsh-pomodoro-p10k",
+        "type": "path"
       }
     }
   },

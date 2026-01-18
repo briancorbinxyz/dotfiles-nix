@@ -6,5 +6,6 @@
     ./atuin.nix
     ./bat.nix
     ./fzf.nix
+    ./opencode.nix
   ];
 }
