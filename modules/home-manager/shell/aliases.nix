@@ -47,8 +47,6 @@
 
   # AI coding assistants
   o = "opencode";
-  nvc = "nvim . -c 'vsplit | terminal claude'";
-  nvch = "nvim . -c 'split | terminal claude'";
 
   # Config editing
   zshrc = "nvim ~/.zshrc";

@@ -68,6 +68,31 @@ in
         # Functions
         mkcd() { mkdir -p "$1" && cd "$1" }
 
+        # Nvim + Claude with terminal title
+        _nvim_title() {
+          if git rev-parse --is-inside-work-tree &>/dev/null; then
+            basename "$(git rev-parse --show-toplevel)"
+          else
+            basename "$PWD"
+          fi
+        }
+        nvc() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal claude'
+        }
+        nvch() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'split | terminal claude'
+        }
+        nvc2() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal claude' -c 'split | terminal claude'
+        }
+        nvc4() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'terminal claude' -c 'vsplit | terminal claude' -c 'split | terminal claude' -c 'wincmd h | split | terminal claude'
+        }
+
         ${lib.optionalString pkgs.stdenv.isDarwin ''
         # Homebrew
         eval "$(/opt/homebrew/bin/brew shellenv)"

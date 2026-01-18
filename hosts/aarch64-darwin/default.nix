@@ -89,6 +89,7 @@
       "google-chrome"
       "obsidian"
       "visual-studio-code"
+      "zoom"
       "zotero"
     ];
   };
