@@ -12,12 +12,22 @@ Cross-platform dotfiles managed with Nix flakes and home-manager.
 
 ## Installation
 
+> **Warning**: Installation requires `sudo` access. The install script and nix-darwin commands modify system-level configurations.
+
 ### Quick Install (recommended)
 
 Run the bootstrap script - it handles everything (Nix, cloning, configuration):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/briancorbinxyz/dotfiles-nix/main/install.sh | bash
+```
+
+Or, if you prefer to inspect the script first:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/briancorbinxyz/dotfiles-nix/main/install.sh -o install.sh
+less install.sh  # review the script
+bash install.sh
 ```
 
 ### Manual Install
