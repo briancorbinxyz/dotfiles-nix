@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixglPkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -19,7 +19,7 @@
 
     # Graphics/OpenGL wrapper (needed for GUI apps on non-NixOS systems like Steam Deck)
     # Run apps with: nixGLDefault ghostty
-    nixGLDefault
+    nixglPkgs.nixGLDefault
 
     # AI (on macOS installed via Homebrew cask)
     ollama

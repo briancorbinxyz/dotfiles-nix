@@ -40,12 +40,8 @@
 
       overlays = [ ];
 
-      # Linux overlays include nixGL for OpenGL wrapper support
-      linuxOverlays = overlays ++ [ nixgl.overlay ];
-
       pkgsFor = system: import nixpkgs {
-        inherit system;
-        overlays = if builtins.match ".*-linux" system != null then linuxOverlays else overlays;
+        inherit system overlays;
         config.allowUnfree = true;
       };
 
@@ -83,7 +79,10 @@
       # Linux x86_64
       homeConfigurations."x86_64-linux" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor "x86_64-linux";
-        extraSpecialArgs = { inherit inputs user; };
+        extraSpecialArgs = {
+          inherit inputs user;
+          nixglPkgs = nixgl.packages.x86_64-linux;
+        };
         modules = commonHomeModules ++ [
           ./hosts/x86_64-linux
           ./modules/home-manager/packages/linux.nix
@@ -93,7 +92,10 @@
       # Linux aarch64
       homeConfigurations."aarch64-linux" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor "aarch64-linux";
-        extraSpecialArgs = { inherit inputs user; };
+        extraSpecialArgs = {
+          inherit inputs user;
+          nixglPkgs = nixgl.packages.aarch64-linux;
+        };
         modules = commonHomeModules ++ [
           ./hosts/aarch64-linux
           ./modules/home-manager/packages/linux.nix
@@ -103,7 +105,11 @@
       # Steam Deck (x86_64-linux with deck persona)
       homeConfigurations."steamdeck" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor "x86_64-linux";
-        extraSpecialArgs = { inherit inputs; user = personas.deck; };
+        extraSpecialArgs = {
+          inherit inputs;
+          user = personas.deck;
+          nixglPkgs = nixgl.packages.x86_64-linux;
+        };
         modules = commonHomeModules ++ [
           ./hosts/x86_64-linux
           ./modules/home-manager/packages/linux.nix
