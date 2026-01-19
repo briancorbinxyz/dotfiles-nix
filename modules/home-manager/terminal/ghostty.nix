@@ -23,6 +23,20 @@
     theme = dark:TokyoNight,light:TokyoNight Day
 
     # Shell
+    command = zsh
     shell-integration = zsh
   '';
+
+  # Desktop entry for Linux with nixGL wrapper
+  xdg.desktopEntries = lib.mkIf pkgs.stdenv.isLinux {
+    ghostty = {
+      name = "Ghostty";
+      comment = "A terminal emulator";
+      exec = "nixGL ghostty";
+      icon = "ghostty";
+      terminal = false;
+      type = "Application";
+      categories = [ "System" "TerminalEmulator" ];
+    };
+  };
 }
