@@ -16,6 +16,19 @@ success() { echo -e "${GREEN}[OK]${NC} $1"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 error() { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
+# Keep sudo alive throughout the script
+start_sudo_keepalive() {
+    info "Requesting sudo access (password will be cached for the duration)..."
+    sudo -v
+    # Keep sudo timestamp fresh in the background
+    while true; do
+        sudo -n true
+        sleep 50
+    done &
+    SUDO_KEEPALIVE_PID=$!
+    trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
+}
+
 # Detect platform
 detect_platform() {
     local os arch
@@ -108,6 +121,11 @@ main() {
     local platform
     platform="$(detect_platform)"
     info "Detected platform: $platform"
+
+    # macOS requires sudo for nix-darwin and Homebrew
+    if [[ "$platform" == *-darwin ]]; then
+        start_sudo_keepalive
+    fi
 
     # Step 1: Install Nix
     install_nix
