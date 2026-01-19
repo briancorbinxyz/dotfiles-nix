@@ -18,9 +18,14 @@
       url = "github:10xdevclub/pomo";
       flake = false;
     };
+
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-darwin, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-darwin, nixgl, ... }:
     let
       supportedSystems = [
         "aarch64-darwin"
@@ -35,8 +40,12 @@
 
       overlays = [ ];
 
+      # Linux overlays include nixGL for OpenGL wrapper support
+      linuxOverlays = overlays ++ [ nixgl.overlay ];
+
       pkgsFor = system: import nixpkgs {
-        inherit system overlays;
+        inherit system;
+        overlays = if builtins.match ".*-linux" system != null then linuxOverlays else overlays;
         config.allowUnfree = true;
       };
 
