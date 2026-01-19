@@ -39,11 +39,7 @@
   top = "htop";
   sys = "btop";
 
-  # Docker
-  d = "docker";
-  dc = "docker compose";
-  dps = "docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'";
-  dex = "docker exec -it";
+
 
   # Navigation
   ".." = "cd ..";
