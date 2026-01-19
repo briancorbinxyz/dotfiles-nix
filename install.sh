@@ -44,7 +44,12 @@ detect_platform() {
             fi
             ;;
         Linux)
-            echo "${arch}-linux"
+            # Detect Steam Deck by username
+            if [[ "$USER" == "deck" ]]; then
+                echo "steamdeck"
+            else
+                echo "${arch}-linux"
+            fi
             ;;
         *)
             error "Unsupported OS: $os"
@@ -99,7 +104,7 @@ apply_config() {
             info "Running nix-darwin setup (requires sudo)..."
             sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake "$DOTFILES_DIR#aarch64-darwin"
             ;;
-        *-linux)
+        steamdeck|*-linux)
             info "Running home-manager setup..."
             nix run home-manager/master -- switch --flake "$DOTFILES_DIR#$platform"
             ;;
