@@ -8,6 +8,7 @@ Cross-platform dotfiles managed with Nix flakes and home-manager.
 |--------------|--------------|----------|
 | `aarch64-darwin` | Apple Silicon Mac | nix-darwin + home-manager + Homebrew |
 | `x86_64-linux` | Intel/AMD Linux | standalone home-manager |
+| `x86_64-linux` | Steam Deck | standalone home-manager (see [Steam Deck](#steam-deck)) |
 | `aarch64-linux` | ARM Linux (Pi, etc.) | standalone home-manager |
 
 ## Installation
@@ -71,6 +72,29 @@ nix run home-manager/master -- switch --flake ~/dotfiles-nix#$(uname -m)-linux
 # Subsequent updates
 home-manager switch --flake ~/dotfiles-nix#$(uname -m)-linux
 ```
+
+### Steam Deck
+
+SteamOS uses an immutable filesystem, so additional steps are required before installing Nix:
+
+```bash
+# 1. Disable read-only mode
+sudo steamos-readonly disable
+
+# 2. Create Nix directories (must be root-owned)
+sudo mkdir -p /nix /nix/var /nix/var/nix /nix/var/nix/db /nix/var/nix/gcroots /nix/var/nix/profiles /nix/var/nix/temproots /nix/var/nix/userpool /nix/var/log/nix /nix/var/log/nix/drvs
+sudo chown -R root:root /nix
+
+# 3. Install Nix
+sh <(curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix) install
+
+# 4. Re-enable read-only mode
+sudo steamos-readonly enable
+```
+
+After this, follow the standard Linux installation steps above using `x86_64-linux`.
+
+> **Note**: SteamOS updates may reset the filesystem. You may need to repeat these steps after major system updates.
 
 ## Structure
 
