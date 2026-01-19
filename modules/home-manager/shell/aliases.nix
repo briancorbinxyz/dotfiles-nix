@@ -42,6 +42,15 @@
   pc = "podman compose";
   pps = "podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'";
   pex = "podman exec -it";
+
+  # Network
+  di = "dig";
+  di4 = "dig +short -4";
+  di6 = "dig +short -6";
+  diga = "dig +all ANY";
+  digs = "dig +short";
+  digg = "dig @8.8.8.8 +nocmd any +multiline +noall +answer";
+
   # Navigation
   ".." = "cd ..";
   "..." = "cd ../..";
