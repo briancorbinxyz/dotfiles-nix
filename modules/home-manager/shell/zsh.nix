@@ -4,6 +4,8 @@ let
   aliases = import ./aliases.nix { inherit pkgs lib; };
 in
 {
+  home.file.".p10k.zsh".source = ../../../dotfiles/zsh/.p10k.zsh;
+
   programs.zsh = {
     enable = true;
     dotDir = config.home.homeDirectory;
