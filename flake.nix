@@ -14,8 +14,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zsh-pomodoro-p10k = {
-      url = "path:/Users/briancorbin/Documents/GitHub/zsh-pomodoro-p10k";
+    pomo = {
+      url = "github:10xdevclub/pomo";
       flake = false;
     };
   };

@@ -56,25 +56,28 @@
         "type": "github"
       }
     },
+    "pomo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768716985,
+        "narHash": "sha256-X/Iv50Xuu/M4gZd/8ixf5AwDHBkDJvFVWvuMaIUFa/4=",
+        "owner": "10xdevclub",
+        "repo": "pomo",
+        "rev": "ca4f304af86b3130f7304ba407921dc4eea15449",
+        "type": "github"
+      },
+      "original": {
+        "owner": "10xdevclub",
+        "repo": "pomo",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
-        "zsh-pomodoro-p10k": "zsh-pomodoro-p10k"
-      }
-    },
-    "zsh-pomodoro-p10k": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1768693942,
-        "narHash": "sha256-kvaRkXnDC+9fdqaplKAv6DC1O4lTrojHptTGVPWi7pU=",
-        "path": "/Users/briancorbin/Documents/GitHub/zsh-pomodoro-p10k",
-        "type": "path"
-      },
-      "original": {
-        "path": "/Users/briancorbin/Documents/GitHub/zsh-pomodoro-p10k",
-        "type": "path"
+        "pomo": "pomo"
       }
     }
   },

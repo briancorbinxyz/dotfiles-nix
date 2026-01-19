@@ -33,9 +33,9 @@ in
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
       {
-        name = "zsh-pomodoro-p10k";
-        src = inputs.zsh-pomodoro-p10k;
-        file = "zsh-pomodoro-p10k.plugin.zsh";
+        name = "pomo";
+        src = inputs.pomo;
+        file = "pomo.plugin.zsh";
       }
     ];
 
