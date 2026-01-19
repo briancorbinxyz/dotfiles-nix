@@ -30,11 +30,8 @@
 
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
-      user = {
-        name = "briancorbin";
-        fullName = "Brian Corbin";
-        email = "me@briancorbin.co.uk";
-      };
+      personas = import ./personas;
+      user = personas.briancorbin; # default persona
 
       overlays = [ ];
 
@@ -90,6 +87,16 @@
         extraSpecialArgs = { inherit inputs user; };
         modules = commonHomeModules ++ [
           ./hosts/aarch64-linux
+          ./modules/home-manager/packages/linux.nix
+        ];
+      };
+
+      # Steam Deck (x86_64-linux with deck persona)
+      homeConfigurations."steamdeck" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor "x86_64-linux";
+        extraSpecialArgs = { inherit inputs; user = personas.deck; };
+        modules = commonHomeModules ++ [
+          ./hosts/x86_64-linux
           ./modules/home-manager/packages/linux.nix
         ];
       };

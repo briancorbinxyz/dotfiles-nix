@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Cross-platform dotfiles repository using **Nix flakes** with **home-manager** and **nix-darwin**. Supports Apple Silicon Mac, x86_64 Linux, and ARM Linux (Raspberry Pi, etc.).
+Cross-platform dotfiles repository using **Nix flakes** with **home-manager** and **nix-darwin**. Supports Apple Silicon Mac, x86_64 Linux, ARM Linux (Raspberry Pi), and Steam Deck.
 
 ## Common Commands
 
@@ -30,6 +30,12 @@ nix run home-manager/master -- switch --flake ~/dotfiles-nix#$(uname -m)-linux  
 home-manager switch --flake ~/dotfiles-nix#$(uname -m)-linux  # updates
 ```
 
+Steam Deck (uses `deck` persona):
+```bash
+nix run home-manager/master -- switch --flake ~/dotfiles-nix#steamdeck  # first time
+home-manager switch --flake ~/dotfiles-nix#steamdeck  # updates
+```
+
 ### Development
 
 ```bash
@@ -50,6 +56,9 @@ flake.nix                           # Entry point - defines all host configurati
 │   ├── aarch64-darwin/default.nix  # macOS: nix-darwin system settings + Homebrew
 │   ├── x86_64-linux/default.nix    # Linux x86_64: standalone home-manager
 │   └── aarch64-linux/default.nix   # Linux ARM: lighter config for Pi, etc.
+├── personas/                       # User personas (name, email, etc.)
+│   ├── briancorbin.nix             # Default persona
+│   └── deck.nix                    # Steam Deck persona
 ├── modules/
 │   ├── darwin/                     # nix-darwin modules (system-level macOS)
 │   └── home-manager/               # User-level modules (all platforms)
@@ -68,6 +77,7 @@ flake.nix                           # Entry point - defines all host configurati
 2. **Hybrid Package Management**: Nix for CLI tools, Homebrew for macOS GUI apps (configured in `hosts/aarch64-darwin/default.nix`)
 3. **Modular home-manager**: Organized by function (shell, editors, terminal, tools) not by application
 4. **Raw Dotfiles**: Complex configs like Neovim live in `dotfiles/` and are symlinked via `xdg.configFile`
+5. **Personas**: User identity (name, email) defined in `personas/` and passed to configurations via `extraSpecialArgs`
 
 ### Neovim Setup
 

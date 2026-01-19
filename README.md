@@ -8,7 +8,7 @@ Cross-platform dotfiles managed with Nix flakes and home-manager.
 |--------------|--------------|----------|
 | `aarch64-darwin` | Apple Silicon Mac | nix-darwin + home-manager + Homebrew |
 | `x86_64-linux` | Intel/AMD Linux | standalone home-manager |
-| `x86_64-linux` | Steam Deck | standalone home-manager (see [Steam Deck](#steam-deck)) |
+| `steamdeck` | Steam Deck | standalone home-manager with `deck` persona (see [Steam Deck](#steam-deck)) |
 | `aarch64-linux` | ARM Linux (Pi, etc.) | standalone home-manager |
 
 ## Installation
@@ -92,7 +92,15 @@ sh <(curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems
 sudo steamos-readonly enable
 ```
 
-After this, follow the standard Linux installation steps above using `x86_64-linux`.
+Then apply the Steam Deck configuration (uses `deck` user persona):
+
+```bash
+# First time
+nix run home-manager/master -- switch --flake ~/dotfiles-nix#steamdeck
+
+# Subsequent updates
+home-manager switch --flake ~/dotfiles-nix#steamdeck
+```
 
 > **Note**: SteamOS updates may reset the filesystem. You may need to repeat these steps after major system updates.
 
@@ -103,8 +111,9 @@ dotfiles-nix/
 ├── flake.nix                    # Main flake entry point
 ├── hosts/                       # Host-specific configurations
 │   ├── aarch64-darwin/          # macOS Apple Silicon
-│   ├── x86_64-linux/            # Linux x86_64
+│   ├── x86_64-linux/            # Linux x86_64 (+ Steam Deck)
 │   └── aarch64-linux/           # Linux ARM64
+├── personas/                    # User personas (briancorbin, deck, etc.)
 ├── modules/home-manager/        # Shared home-manager modules
 │   ├── shell/                   # Zsh, aliases
 │   ├── editors/                 # Neovim
