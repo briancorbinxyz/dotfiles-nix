@@ -8,6 +8,7 @@ in
 
   programs.zsh = {
     enable = true;
+    dotDir = ".";  # Keep zsh config in home directory (legacy behavior)
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;

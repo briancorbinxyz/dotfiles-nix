@@ -17,16 +17,7 @@
     xclip
     xdg-utils
 
-    # Graphics/OpenGL wrapper (needed for GUI apps on non-NixOS systems like Steam Deck)
-    # Run apps with: nixGLMesa ghostty
-    nixGLMesa
-
     # AI (on macOS installed via Homebrew cask)
     ollama
-
-    # GUI apps (on macOS these are installed via Homebrew cask)
-    ghostty
-    obsidian
-    dropbox
   ];
 }
