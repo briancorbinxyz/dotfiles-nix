@@ -20,7 +20,7 @@
     ''}
 
     # Theme
-    theme = dark:tokyonight,light:tokyonight
+    theme = dark:TokyoNight,light:TokyoNight Day
 
     # Shell
     shell-integration = zsh
