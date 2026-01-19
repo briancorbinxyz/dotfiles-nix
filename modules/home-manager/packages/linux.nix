@@ -5,6 +5,9 @@
     # Terminal emulator (on macOS this is installed via Homebrew cask)
     alacritty
 
+    # Fonts (Nerd Font for powerlevel10k)
+    nerd-fonts.meslo-lg
+
     # Development tools that work well via Nix on Linux
     rustup
     terraform
