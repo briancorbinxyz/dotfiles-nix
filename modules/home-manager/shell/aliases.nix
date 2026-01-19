@@ -37,10 +37,11 @@
 
   # System monitoring
   top = "htop";
-  sys = "btop";
-
-
-
+  sys = "btop";  # Podman
+  p = "podman";
+  pc = "podman compose";
+  pps = "podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'";
+  pex = "podman exec -it";
   # Navigation
   ".." = "cd ..";
   "..." = "cd ../..";
