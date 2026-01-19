@@ -98,6 +98,7 @@
   ghostty = "nixGLDefault ghostty";
 
   # Nix rebuild (auto-detects architecture and Steam Deck)
-  nix-init = "nix run home-manager/master -- switch --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
-  nix-rebuild = "home-manager switch --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
+  # --impure needed for nixGL GPU driver detection
+  nix-init = "nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
+  nix-rebuild = "home-manager switch --impure --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
 }
