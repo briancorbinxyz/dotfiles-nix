@@ -19,5 +19,10 @@
 
     # AI (on macOS installed via Homebrew cask)
     ollama
+
+    # GUI apps (on macOS these are installed via Homebrew cask)
+    ghostty
+    obsidian
+    dropbox
   ];
 }
