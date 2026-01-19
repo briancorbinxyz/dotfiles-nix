@@ -106,7 +106,8 @@ apply_config() {
             ;;
         steamdeck|*-linux)
             info "Running home-manager setup..."
-            nix run home-manager/master -- switch -b backup --flake "$DOTFILES_DIR#$platform"
+            # --impure needed for nixGL GPU driver detection
+            nix run home-manager/master -- switch -b backup --impure --flake "$DOTFILES_DIR#$platform"
             ;;
         *)
             error "Unknown platform: $platform"
