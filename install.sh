@@ -106,7 +106,7 @@ apply_config() {
             ;;
         steamdeck|*-linux)
             info "Running home-manager setup..."
-            nix run home-manager/master -- switch --flake "$DOTFILES_DIR#$platform"
+            nix run home-manager/master -- switch -b backup --flake "$DOTFILES_DIR#$platform"
             ;;
         *)
             error "Unknown platform: $platform"

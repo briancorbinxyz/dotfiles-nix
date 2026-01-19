@@ -5,7 +5,6 @@
     username = user.name;
     homeDirectory = "/home/${user.name}";
     stateVersion = "24.05";
-    backupFileExtension = "backup";
   };
 
   # aarch64-linux specific settings
