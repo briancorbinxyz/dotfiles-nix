@@ -89,7 +89,7 @@
       "github"
       "google-chrome"
       "obsidian"
-      "ollama"
+      "ollama-app"
       "podman-desktop"
       "visual-studio-code"
       "zoom"

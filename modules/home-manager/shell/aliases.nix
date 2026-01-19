@@ -35,6 +35,10 @@
   tmns = "tmux new -s";
   tms = "tmux new-session -s";
 
+  # System monitoring
+  top = "htop";
+  sys = "btop";
+
   # Docker
   d = "docker";
   dc = "docker compose";
@@ -51,9 +55,23 @@
   myip = "curl -s ifconfig.me";
   weather = "curl wttr.in";
 
+  # fd (modern find)
+  find = "fd";
+  fda = "fd --absolute-path";
+  fdc = "fd --ignore-case";
+  fdd = "fd --list-details";
+  fde = "fd --extension";
+  fdf = "fd --follow";
+  fdh = "fd --hidden";
+  fdn = "fd --glob";
+  fdo = "fd --owner";
+  fds = "fd --size";
+  fdu = "fd --exclude";
+  fdx = "fd --exec";
+
   # FZF + tools
   fzf = "fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'";
-  vf = "nvim $(fd --type f | fzf --preview 'bat --color=always {}')";
+  vfd = "nvim $(fd --type f | fzf --preview 'bat --color=always {}')";
 
   # AI coding assistants
   o = "opencode";

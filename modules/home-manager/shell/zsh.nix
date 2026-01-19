@@ -70,6 +70,15 @@ in
         # Functions
         mkcd() { mkdir -p "$1" && cd "$1" }
 
+        # FZF git branch switcher
+        gcof() {
+          local branches branch
+          branches=$(git branch --all --color=always --sort=-committerdate | grep -v HEAD) &&
+          branch=$(echo "$branches" | fzf --ansi --no-multi --preview-window right:65% \
+            --preview 'git log -n 50 --color=always --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed "s/.* //" <<< {})') &&
+          git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+        }
+
         # Nvim + Claude with terminal title
         _nvim_title() {
           if git rev-parse --is-inside-work-tree &>/dev/null; then
@@ -126,6 +135,39 @@ in
           tmux select-pane -t "$session" -R
           tmux split-window -t "$session" -v 'claude'
           tmux select-pane -t "$session" -L
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
+        }
+
+        # Debug tmux sessions
+        tdebug() {
+          local session="debug"
+          tmux new-session -d -s "$session" -n "monitor" 'htop'
+          tmux split-window -t "$session" -h -l 50% 'btop'
+          tmux new-window -t "$session" -n "system" 'watch -n 2 df -h'
+          tmux split-window -t "$session" -h -l 50% 'watch -n 2 free -h 2>/dev/null || vm_stat'
+          tmux select-window -t "$session:monitor"
+          tmux attach-session -t "$session"
+        }
+        tdebug-full() {
+          local session="debug-full"
+          tmux new-session -d -s "$session" -n "processes" 'htop'
+          tmux split-window -t "$session" -v -l 30% 'watch -n 2 "ps aux --sort=-%mem | head -15 2>/dev/null || ps aux -m | head -15"'
+          tmux new-window -t "$session" -n "resources" 'btop'
+          tmux new-window -t "$session" -n "disk" 'watch -n 5 df -h'
+          tmux split-window -t "$session" -h -l 50% 'watch -n 5 "du -sh * 2>/dev/null | sort -hr | head -20"'
+          tmux new-window -t "$session" -n "network" 'watch -n 2 "netstat -an | grep ESTABLISHED | head -20"'
+          tmux select-window -t "$session:processes"
+          tmux attach-session -t "$session"
+        }
+        tdebug-dev() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}_debug"
+          tmux new-session -d -s "$session" -n "editor" 'nvim .'
+          tmux split-window -t "$session" -h -l 35% 'htop'
+          tmux split-window -t "$session" -v -l 50%
+          tmux new-window -t "$session" -n "monitor" 'btop'
+          tmux select-window -t "$session:editor"
           tmux select-pane -t "$session" -L
           tmux attach-session -t "$session"
         }
