@@ -95,7 +95,7 @@
   ports = "ss -tuln";
 
   # OpenGL wrapper for GUI apps on non-NixOS
-  ghostty = "nixGLMesa ghostty";
+  ghostty = "nixGLDefault ghostty";
 
   # Nix rebuild (auto-detects architecture and Steam Deck)
   nix-init = "nix run home-manager/master -- switch --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
