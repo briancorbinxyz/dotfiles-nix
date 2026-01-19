@@ -94,7 +94,7 @@
   paste = "xclip -selection clipboard -o";
   ports = "ss -tuln";
 
-  # Nix rebuild (auto-detects x86_64 or aarch64)
-  nix-init = "nix run home-manager/master -- switch --flake ~/dotfiles-nix#$(uname -m)-linux";
-  nix-rebuild = "home-manager switch --flake ~/dotfiles-nix#$(uname -m)-linux";
+  # Nix rebuild (auto-detects architecture and Steam Deck)
+  nix-init = "nix run home-manager/master -- switch --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
+  nix-rebuild = "home-manager switch --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
 }
