@@ -95,7 +95,7 @@
   ports = "ss -tuln";
 
   # OpenGL wrapper for GUI apps on non-NixOS
-  ghostty = "nixGLDefault ghostty";
+  ghostty = "nixGL ghostty";
 
   # Nix rebuild (auto-detects architecture and Steam Deck)
   # --impure needed for nixGL GPU driver detection
