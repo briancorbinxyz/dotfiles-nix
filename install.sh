@@ -109,22 +109,31 @@ setup_persona() {
     info "Setting up your user persona..."
     echo ""
 
+    # Check if /dev/tty is available (needed for curl | bash)
+    if [[ ! -r /dev/tty ]]; then
+        error "/dev/tty not available. Please run: bash <(curl -fsSL URL) instead of curl | bash"
+    fi
+
     # Get username (default to current user)
     local default_username="$USER"
-    read -p "Username [$default_username]: " input_username < /dev/tty
+    echo -n "Username [$default_username]: "
+    read input_username < /dev/tty
     local username="${input_username:-$default_username}"
 
     # Get full name
     local default_fullname
     default_fullname=$(getent passwd "$USER" 2>/dev/null | cut -d: -f5 | cut -d, -f1 || id -F 2>/dev/null || echo "$USER")
-    read -p "Full name [$default_fullname]: " input_fullname < /dev/tty
+    echo -n "Full name [$default_fullname]: "
+    read input_fullname < /dev/tty
     local fullname="${input_fullname:-$default_fullname}"
 
     # Get email
-    read -p "Email: " email < /dev/tty
+    echo -n "Email: "
+    read email < /dev/tty
     while [[ -z "$email" ]]; do
         warn "Email is required for git configuration"
-        read -p "Email: " email < /dev/tty
+        echo -n "Email: "
+        read email < /dev/tty
     done
 
     # Create env file for nix configuration
