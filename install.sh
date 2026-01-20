@@ -108,20 +108,20 @@ setup_persona() {
 
     # Get username (default to current user)
     local default_username="$USER"
-    read -p "Username [$default_username]: " input_username
+    read -p "Username [$default_username]: " input_username < /dev/tty
     local username="${input_username:-$default_username}"
 
     # Get full name
     local default_fullname
     default_fullname=$(getent passwd "$USER" 2>/dev/null | cut -d: -f5 | cut -d, -f1 || id -F 2>/dev/null || echo "$USER")
-    read -p "Full name [$default_fullname]: " input_fullname
+    read -p "Full name [$default_fullname]: " input_fullname < /dev/tty
     local fullname="${input_fullname:-$default_fullname}"
 
     # Get email
-    read -p "Email: " email
+    read -p "Email: " email < /dev/tty
     while [[ -z "$email" ]]; do
         warn "Email is required for git configuration"
-        read -p "Email: " email
+        read -p "Email: " email < /dev/tty
     done
 
     # Create env file for nix configuration
