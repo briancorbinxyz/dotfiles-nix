@@ -50,6 +50,8 @@
   diga = "dig +all ANY";
   digs = "dig +short";
   digg = "dig @8.8.8.8 +nocmd any +multiline +noall +answer";
+  ip4 = "dig +short myip.opendns.com @resolver1.opendns.com -4";
+  ip6 = "dig -6 AAAA +short myip.opendns.com. @resolver1.opendns.com.";
 
   # Navigation
   ".." = "cd ..";
