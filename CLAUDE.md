@@ -36,14 +36,27 @@ nix run home-manager/master -- switch --flake ~/dotfiles-nix#steamdeck  # first 
 home-manager switch --flake ~/dotfiles-nix#steamdeck  # updates
 ```
 
-### Development
+### Development & Validation
 
 ```bash
 # Enter dev shell with git and nixfmt
 nix develop
 
-# Format Nix files
+# Format Nix files (required before commits)
 nixfmt <file.nix>
+nixfmt **/*.nix        # Format all Nix files
+
+# Lua formatting (for Neovim config in dotfiles/nvim/)
+stylua <file.lua>      # indent_type=Spaces, indent_width=2, column_width=120
+
+# Validate configuration
+nix flake check        # Syntax validation
+nix flake show         # Show what would be built
+nix-rebuild --dry-run  # Test changes without applying
+
+# Build specific configuration (without activating)
+nix build .#darwinConfigurations.aarch64-darwin.system
+nix build .#homeConfigurations.x86_64-linux.activationPackage
 ```
 
 ## Architecture
@@ -79,6 +92,37 @@ flake.nix                           # Entry point - defines all host configurati
 4. **Raw Dotfiles**: Complex configs like Neovim live in `dotfiles/` and are symlinked via `xdg.configFile`
 5. **Personas**: User identity (name, email) defined in `personas/` and passed to configurations via `extraSpecialArgs`
 
+### Common Nix Patterns
+
+Platform-specific packages:
+```nix
+home.packages = with pkgs; [
+  git neovim  # cross-platform
+] ++ lib.optionals pkgs.stdenv.isDarwin [
+  # macOS-only
+] ++ lib.optionals pkgs.stdenv.isLinux [
+  # Linux-only
+];
+```
+
+Platform-specific aliases:
+```nix
+shellAliases = {
+  ll = "lsd -la";  # common
+} // lib.optionalAttrs pkgs.stdenv.isDarwin {
+  copy = "pbcopy";
+} // lib.optionalAttrs pkgs.stdenv.isLinux {
+  copy = "xclip -selection clipboard";
+};
+```
+
+Conditional configuration strings:
+```nix
+${lib.optionalString pkgs.stdenv.isDarwin ''
+  # macOS-specific config
+''}
+```
+
 ### Neovim Setup
 
 Uses **LazyVim** framework. Custom plugins defined in `dotfiles/nvim/lua/plugins/briancorbinxyz.lua`. LSP servers (pyright, typescript-language-server, nil, rust-analyzer) installed via home-manager's `extraPackages`, not Mason.
@@ -86,3 +130,11 @@ Uses **LazyVim** framework. Custom plugins defined in `dotfiles/nvim/lua/plugins
 ### Shell Integration
 
 Zsh is primary shell with oh-my-zsh + powerlevel10k. Tool integrations (zoxide, atuin, fzf, pay-respects) configured in `modules/home-manager/shell/zsh.nix`. Modern aliases (bat→cat, lsd→ls) in `aliases.nix`.
+
+## Adding New Configuration
+
+1. **New tool/application**: Create module in `modules/home-manager/<category>/` and import in that category's `default.nix`
+2. **New shell alias**: Add to `modules/home-manager/shell/aliases.nix`
+3. **New package**: Add to appropriate file in `modules/home-manager/packages/` (default.nix for cross-platform, darwin.nix or linux.nix for platform-specific)
+4. **Complex raw config**: Place in `dotfiles/` and symlink via `xdg.configFile` in the relevant module
+5. **macOS GUI app**: Add to Homebrew casks in `hosts/aarch64-darwin/default.nix`
