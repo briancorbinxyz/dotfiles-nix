@@ -50,6 +50,9 @@ in
         fi
       '')
       ''
+        # Source nominix user configuration if exists (for nix-rebuild)
+        [[ ! -f ~/.config/nominix/env ]] || source ~/.config/nominix/env
+
         # Source p10k config if exists
         [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 

@@ -3,6 +3,7 @@ set -e
 
 REPO_URL="https://github.com/briancorbinxyz/dotfiles-nix.git"
 DOTFILES_DIR="$HOME/dotfiles-nix"
+ENV_FILE="$HOME/.config/nominix/env"
 
 # Colors
 RED='\033[0;31m'
@@ -93,20 +94,71 @@ clone_dotfiles() {
     success "Dotfiles ready at $DOTFILES_DIR"
 }
 
+# Setup user persona
+setup_persona() {
+    # Skip if env file already exists
+    if [[ -f "$ENV_FILE" ]]; then
+        info "User configuration already exists at $ENV_FILE"
+        return
+    fi
+
+    echo ""
+    info "Setting up your user persona..."
+    echo ""
+
+    # Get username (default to current user)
+    local default_username="$USER"
+    read -p "Username [$default_username]: " input_username
+    local username="${input_username:-$default_username}"
+
+    # Get full name
+    local default_fullname
+    default_fullname=$(getent passwd "$USER" 2>/dev/null | cut -d: -f5 | cut -d, -f1 || id -F 2>/dev/null || echo "$USER")
+    read -p "Full name [$default_fullname]: " input_fullname
+    local fullname="${input_fullname:-$default_fullname}"
+
+    # Get email
+    read -p "Email: " email
+    while [[ -z "$email" ]]; do
+        warn "Email is required for git configuration"
+        read -p "Email: " email
+    done
+
+    # Create env file for nix configuration
+    info "Creating user configuration..."
+    mkdir -p "$(dirname "$ENV_FILE")"
+    cat > "$ENV_FILE" << EOF
+# nominix user configuration
+# These environment variables are used by the nix flake (with --impure)
+export NOMINIX_USER="$username"
+export NOMINIX_FULLNAME="$fullname"
+export NOMINIX_EMAIL="$email"
+EOF
+
+    success "User configuration created at $ENV_FILE"
+}
+
 # Run nix configuration
 apply_config() {
     local platform="$1"
 
     info "Applying configuration for $platform..."
 
+    # Source env file if it exists (sets NOMINIX_* variables)
+    if [[ -f "$ENV_FILE" ]]; then
+        source "$ENV_FILE"
+    fi
+
     case "$platform" in
         aarch64-darwin|x86_64-darwin)
             info "Running nix-darwin setup (requires sudo)..."
-            sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake "$DOTFILES_DIR#aarch64-darwin"
+            # --impure needed for NOMINIX_* environment variables
+            sudo NOMINIX_USER="${NOMINIX_USER:-}" NOMINIX_FULLNAME="${NOMINIX_FULLNAME:-}" NOMINIX_EMAIL="${NOMINIX_EMAIL:-}" \
+                nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --impure --flake "$DOTFILES_DIR#aarch64-darwin"
             ;;
         steamdeck|*-linux)
             info "Running home-manager setup..."
-            # --impure needed for nixGL GPU driver detection
+            # --impure needed for nixGL GPU driver detection and NOMINIX_* variables
             nix run home-manager/master -- switch -b backup --impure --flake "$DOTFILES_DIR#$platform"
             ;;
         *)
@@ -139,7 +191,10 @@ main() {
     # Step 2: Clone dotfiles
     clone_dotfiles
 
-    # Step 3: Apply configuration
+    # Step 3: Setup user persona
+    setup_persona
+
+    # Step 4: Apply configuration
     apply_config "$platform"
 
     echo ""

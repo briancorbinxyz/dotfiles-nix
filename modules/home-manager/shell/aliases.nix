@@ -93,9 +93,9 @@
   paste = "pbpaste";
   ports = "lsof -i -P -n | grep LISTEN";
 
-  # Nix rebuild
-  nix-init = "sudo nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --flake ~/dotfiles-nix#aarch64-darwin";
-  nix-rebuild = "sudo darwin-rebuild switch --flake ~/dotfiles-nix#aarch64-darwin";
+  # Nix rebuild (--impure needed for NOMINIX_* user configuration)
+  nix-init = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
+  nix-rebuild = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" darwin-rebuild switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
 } // lib.optionalAttrs pkgs.stdenv.isLinux {
   # Linux-specific aliases
   copy = "xclip -selection clipboard";

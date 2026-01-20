@@ -36,7 +36,6 @@
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
       personas = import ./personas;
-      user = personas.briancorbin; # default persona
 
       overlays = [ ];
 
@@ -49,11 +48,25 @@
         ./modules/home-manager
       ];
 
+      # Build user from environment variables (with --impure) or fall back to briancorbin
+      # Environment: NOMINIX_USER, NOMINIX_FULLNAME, NOMINIX_EMAIL
+      envUser = builtins.getEnv "NOMINIX_USER";
+      envFullName = builtins.getEnv "NOMINIX_FULLNAME";
+      envEmail = builtins.getEnv "NOMINIX_EMAIL";
+
+      defaultUser = personas.briancorbin // (
+        if envUser != "" then {
+          name = envUser;
+          fullName = if envFullName != "" then envFullName else envUser;
+          email = if envEmail != "" then envEmail else personas.briancorbin.email;
+        } else {}
+      );
+
     in {
       # macOS (aarch64-darwin)
       darwinConfigurations."aarch64-darwin" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        specialArgs = { inherit inputs user; };
+        specialArgs = { inherit inputs; user = defaultUser; };
         modules = [
           ./hosts/aarch64-darwin
           home-manager.darwinModules.home-manager
@@ -62,8 +75,8 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "backup";
-              extraSpecialArgs = { inherit inputs user; };
-              users.briancorbin = { pkgs, lib, ... }: {
+              extraSpecialArgs = { inherit inputs; user = defaultUser; };
+              users.${defaultUser.name} = { pkgs, lib, ... }: {
                 imports = commonHomeModules ++ [
                   ./modules/home-manager/packages/darwin.nix
                 ];
@@ -71,7 +84,7 @@
                 xdg.configFile."atuin/config.toml".force = lib.mkForce true;
               };
             };
-            users.users.briancorbin.home = "/Users/briancorbin";
+            users.users.${defaultUser.name}.home = "/Users/${defaultUser.name}";
           }
         ];
       };
@@ -80,7 +93,8 @@
       homeConfigurations."x86_64-linux" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor "x86_64-linux";
         extraSpecialArgs = {
-          inherit inputs user;
+          inherit inputs;
+          user = defaultUser;
           nixglPkgs = nixgl.packages.x86_64-linux;
         };
         modules = commonHomeModules ++ [
@@ -93,7 +107,8 @@
       homeConfigurations."aarch64-linux" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor "aarch64-linux";
         extraSpecialArgs = {
-          inherit inputs user;
+          inherit inputs;
+          user = defaultUser;
           nixglPkgs = nixgl.packages.aarch64-linux;
         };
         modules = commonHomeModules ++ [

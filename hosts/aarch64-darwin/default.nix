@@ -4,7 +4,7 @@
   system.stateVersion = 5;
   nixpkgs.hostPlatform = "aarch64-darwin";
 
-  system.primaryUser = "briancorbin";
+  system.primaryUser = user.name;
 
   nix = {
     settings = {
