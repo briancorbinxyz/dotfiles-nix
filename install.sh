@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-set -e
+set -eE
+
+# Trap errors and show what failed
+trap 'echo -e "\n\033[0;31m[ERROR]\033[0m Script failed at line $LINENO: $BASH_COMMAND" >&2' ERR
 
 REPO_URL="https://github.com/briancorbinxyz/dotfiles-nix.git"
 DOTFILES_DIR="$HOME/dotfiles-nix"
