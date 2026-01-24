@@ -61,6 +61,9 @@ in
         eval "$(pay-respects zsh --alias oops)"
         eval "$(atuin init zsh)"
 
+        # Pomodoro configuration
+        export POMODORO_REALTIME=true
+
         # FZF configuration
         export FZF_COMPLETION_TRIGGER='``'
         [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
