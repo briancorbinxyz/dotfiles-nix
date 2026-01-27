@@ -8,6 +8,7 @@ in
 
   programs.zsh = {
     enable = true;
+    dotDir = config.home.homeDirectory; # Lock in legacy default (home directory)
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;

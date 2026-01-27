@@ -83,6 +83,11 @@
 
   # AI coding assistants
   o = "opencode";
+  c = "claude";
+  cr = "claude --continue";
+  cplan = "claude --plan";
+  cx = "claude --dangerously-skip-permissions";
+  cv = "claude --verbose";
 
   # Config editing
   zshrc = "nvim ~/.zshrc";

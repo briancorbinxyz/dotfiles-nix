@@ -91,7 +91,7 @@
       "obsidian"
       "ollama-app"
       "podman-desktop"
-      "tailscale"
+      "tailscale-app"
       "termius"
       "visual-studio-code"
       "zoom"

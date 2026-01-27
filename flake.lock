@@ -98,16 +98,16 @@
     "pomo": {
       "flake": false,
       "locked": {
-        "lastModified": 1768716985,
-        "narHash": "sha256-X/Iv50Xuu/M4gZd/8ixf5AwDHBkDJvFVWvuMaIUFa/4=",
-        "owner": "10xdevclub",
-        "repo": "pomo",
-        "rev": "ca4f304af86b3130f7304ba407921dc4eea15449",
+        "lastModified": 1769478167,
+        "narHash": "sha256-q/Mv5bQsEePuTC0NUqAzzbLqN/uteiwlMJGVVkWmGg8=",
+        "owner": "pomopomo-app",
+        "repo": "pomo-zsh",
+        "rev": "22e3a9f007ff4dd187452008454d2e18e1ef2159",
         "type": "github"
       },
       "original": {
-        "owner": "10xdevclub",
-        "repo": "pomo",
+        "owner": "pomopomo-app",
+        "repo": "pomo-zsh",
         "type": "github"
       }
     },

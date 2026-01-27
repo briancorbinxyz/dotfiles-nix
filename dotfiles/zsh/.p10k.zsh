@@ -49,7 +49,7 @@
     # =========================[ Line #1 ]=========================
     status                  # exit code of the last command
     command_execution_time  # duration of the last command
-    pomodoro                # pomodoro timer (zsh-pomodoro-p10k)
+    pomo                    # pomo timer
     background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)

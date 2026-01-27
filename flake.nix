@@ -15,7 +15,7 @@
     };
 
     pomo = {
-      url = "github:10xdevclub/pomo";
+      url = "github:pomopomo-app/pomo-zsh";
       flake = false;
     };
 
