@@ -43,6 +43,11 @@ in
 
     shellAliases = aliases;
 
+    # Set before plugin loads for real-time timer updates
+    sessionVariables = {
+      POMODORO_REALTIME = "true";
+    };
+
     initContent = lib.mkMerge [
       (lib.mkBefore ''
         # Powerlevel10k instant prompt
@@ -61,9 +66,6 @@ in
         eval "$(zoxide init zsh)"
         eval "$(pay-respects zsh --alias oops)"
         eval "$(atuin init zsh)"
-
-        # Pomodoro configuration
-        export POMODORO_REALTIME=true
 
         # FZF configuration
         export FZF_COMPLETION_TRIGGER='``'
