@@ -220,6 +220,15 @@ in
         export PATH="$HOME/.local/bin:$PATH"
         export PATH="$HOME/node_modules/.bin:$PATH"
 
+        # Fix pomo realtime: zle .reset-prompt bypasses p10k's wrapper, causing cursor drift
+        # with multi-line prompts (POWERLEVEL9K_TRANSIENT_PROMPT). Use p10k reset-prompt instead.
+        _pomo_refresh_widget() {
+          _pomo_read_state 2>/dev/null
+          [[ "$POMO_STATUS" != "running" && "$POMO_STATUS" != "paused" ]] && return
+          _pomo_update_segment 2>/dev/null
+          (( ''${+functions[p10k]} )) && p10k reset-prompt
+        }
+
         # Dotfiles alias (bare git repo)
         alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 

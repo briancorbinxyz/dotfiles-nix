@@ -98,11 +98,11 @@
     "pomo": {
       "flake": false,
       "locked": {
-        "lastModified": 1769478167,
-        "narHash": "sha256-q/Mv5bQsEePuTC0NUqAzzbLqN/uteiwlMJGVVkWmGg8=",
+        "lastModified": 1769835111,
+        "narHash": "sha256-2oviI9/PzZEYwuWNFA2ossUkVY6QrxIF4st74s5Kv24=",
         "owner": "pomopomo-app",
         "repo": "pomo-zsh",
-        "rev": "22e3a9f007ff4dd187452008454d2e18e1ef2159",
+        "rev": "285846fa61d2ef836049cbe4ec096a56fe78ad1c",
         "type": "github"
       },
       "original": {
