@@ -101,6 +101,7 @@
   # Nix rebuild (--impure needed for NOMINIX_* user configuration)
   nix-init = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
   nix-rebuild = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" darwin-rebuild switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
+  nix-update = "nix flake update && sudo darwin-rebuild switch --flake .#aarch64-darwin";
 } // lib.optionalAttrs pkgs.stdenv.isLinux {
   # Linux-specific aliases
   copy = "xclip -selection clipboard";
@@ -114,4 +115,5 @@
   # --impure needed for nixGL GPU driver detection
   nix-init = "nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
   nix-rebuild = "home-manager switch --impure --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
+  nix-update = "nix flake update && home-manager switch --flake .#$(uname -m)-linux";
 }
