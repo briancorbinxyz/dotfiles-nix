@@ -23,6 +23,7 @@
     delta
 
     # Development tools
+    bun
     grpcurl
     httpie
     websocat
