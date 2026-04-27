@@ -141,3 +141,12 @@ dotfiles-nix/
 - Alacritty/Ghostty terminal configs
 - Git configuration
 - tmux configuration
+
+### Notable Aliases
+
+| Alias | Description |
+|-------|-------------|
+| `brain-sync` | Sync Obsidian vault (Brain) to website repo's `content/` |
+| `brain-publish` | Sync, commit, and push to deploy the website |
+| `nix-rebuild` | Rebuild nix configuration for current platform |
+| `c` / `cr` / `cx` | Claude Code shortcuts |

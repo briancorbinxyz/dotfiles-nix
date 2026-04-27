@@ -89,6 +89,11 @@
   cx = "claude --dangerously-skip-permissions";
   cv = "claude --verbose";
 
+  # Website (Brain -> Quartz)
+  brain-dry = "~/Documents/GitHub/briancorbinxyz.github.io/sync-content.sh --dry-run";
+  brain-sync = "~/Documents/GitHub/briancorbinxyz.github.io/sync-content.sh";
+  brain-publish = "~/Documents/GitHub/briancorbinxyz.github.io/sync-content.sh --push";
+
   # Config editing
   zshrc = "nvim ~/.zshrc";
   reload = "source ~/.zshrc";
