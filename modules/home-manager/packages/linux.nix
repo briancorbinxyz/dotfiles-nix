@@ -1,11 +1,17 @@
-{ config, pkgs, lib, nixglPkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  nixglPkgs,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
     # Terminal emulator (on macOS this is installed via Homebrew cask)
     alacritty
 
-    # Fonts (Nerd Font for powerlevel10k)
+    # Fonts (Nerd Font for starship prompt glyphs)
     nerd-fonts.meslo-lg
 
     # Development tools that work well via Nix on Linux

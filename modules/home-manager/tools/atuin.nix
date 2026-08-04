@@ -3,7 +3,7 @@
 {
   programs.atuin = {
     enable = true;
-    enableZshIntegration = false; # We handle this in zsh.nix initExtra
+    enableZshIntegration = false; # We handle this in zsh.nix initContent
 
     settings = {
       auto_sync = true;

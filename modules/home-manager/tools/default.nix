@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -8,5 +13,7 @@
     ./claude.nix
     ./fzf.nix
     ./opencode.nix
+    ./fnm.nix
+    ./starship.nix
   ];
 }

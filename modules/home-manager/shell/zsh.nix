@@ -1,11 +1,16 @@
-{ config, pkgs, lib, user, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  user,
+  inputs,
+  ...
+}:
 
 let
   aliases = import ./aliases.nix { inherit pkgs lib; };
 in
 {
-  home.file.".p10k.zsh".source = ../../../dotfiles/zsh/.p10k.zsh;
-
   programs.zsh = {
     enable = true;
     dotDir = config.home.homeDirectory; # Lock in legacy default (home directory)
@@ -25,15 +30,9 @@ in
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" ];
-      theme = "agnoster";
     };
 
     plugins = [
-      {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
       {
         name = "pomo";
         src = inputs.pomo;
@@ -49,18 +48,24 @@ in
     };
 
     initContent = lib.mkMerge [
-      (lib.mkBefore ''
-        # Powerlevel10k instant prompt
-        if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-          source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-        fi
-      '')
       ''
         # Source nominix user configuration if exists (for nix-rebuild)
         [[ ! -f ~/.config/nominix/env ]] || source ~/.config/nominix/env
 
-        # Source p10k config if exists
-        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+        # Reset tty + cursor column after atuin's TUI exits.
+        # atuin <18.17 has a ratatui-related bug where the cursor isn't
+        # returned to column 0 on exit (atuinsh/atuin#3578). We fix from two
+        # sides: `printf '\r'` explicitly returns cursor to column 0, and
+        # `stty sane` restores cooked mode in case anything left it raw.
+        # Runs both before commands (preexec) and before prompts (precmd)
+        # to catch both output-side and prompt-side drift.
+        autoload -Uz add-zsh-hook
+        _starship_reset_tty() {
+          stty sane 2>/dev/null || true
+          printf '\r' 2>/dev/null || true
+        }
+        add-zsh-hook preexec _starship_reset_tty
+        add-zsh-hook precmd _starship_reset_tty
 
         # Initialize tools
         eval "$(zoxide init zsh)"
@@ -181,53 +186,44 @@ in
         }
 
         ${lib.optionalString pkgs.stdenv.isDarwin ''
-        # Homebrew
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+          # Homebrew
+          eval "$(/opt/homebrew/bin/brew shellenv)"
 
-        # pyenv
-        if command -v pyenv &> /dev/null; then
-          eval "$(pyenv init --path)"
-          eval "$(pyenv init -)"
-        fi
-
-        # asdf
-        if [ -f "$(brew --prefix asdf)/libexec/asdf.sh" ]; then
-          . "$(brew --prefix asdf)/libexec/asdf.sh"
-        fi
-
-        # Conda (if installed)
-        __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-        if [ $? -eq 0 ]; then
-          eval "$__conda_setup"
-        else
-          if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-            . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+          # pyenv
+          if command -v pyenv &> /dev/null; then
+            eval "$(pyenv init --path)"
+            eval "$(pyenv init -)"
           fi
-        fi
-        unset __conda_setup
 
-        # Android SDK
-        export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-        export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
+          # asdf
+          if [ -f "$(brew --prefix asdf)/libexec/asdf.sh" ]; then
+            . "$(brew --prefix asdf)/libexec/asdf.sh"
+          fi
+
+          # Conda (if installed)
+          __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+          if [ $? -eq 0 ]; then
+            eval "$__conda_setup"
+          else
+            if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+              . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+            fi
+          fi
+          unset __conda_setup
+
+          # Android SDK
+          export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+          export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
         ''}
 
         ${lib.optionalString pkgs.stdenv.isLinux ''
-        # Linux-specific initialization
-        export PATH="$HOME/.local/bin:$PATH"
+          # Linux-specific initialization
+          export PATH="$HOME/.local/bin:$PATH"
         ''}
 
         # Common paths
         export PATH="$HOME/.local/bin:$PATH"
         export PATH="$HOME/node_modules/.bin:$PATH"
-
-        # Fix pomo realtime: zle .reset-prompt bypasses p10k's wrapper, causing cursor drift
-        # with multi-line prompts (POWERLEVEL9K_TRANSIENT_PROMPT). Use p10k reset-prompt instead.
-        _pomo_refresh_widget() {
-          _pomo_read_state 2>/dev/null
-          [[ "$POMO_STATUS" != "running" && "$POMO_STATUS" != "paused" ]] && return
-          _pomo_update_segment 2>/dev/null
-          (( ''${+functions[p10k]} )) && p10k reset-prompt
-        }
 
         # Dotfiles alias (bare git repo)
         alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
@@ -238,6 +234,9 @@ in
         alias -s yaml=bat
         alias -s yml=bat
         alias -s txt=bat
+
+        # Starship transient prompt: collapse previous prompts to a single ❯
+        (( ''${+functions[enable_transience]} )) && enable_transience
       ''
     ];
   };
