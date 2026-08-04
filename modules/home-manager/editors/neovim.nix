@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.neovim = {
@@ -6,6 +11,8 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    withRuby = true;
+    withPython3 = true;
 
     # Neovim plugins are managed by lazy.nvim, not Nix
     # We just ensure dependencies are available
@@ -13,7 +20,7 @@
       # Language servers
       lua-language-server
       pyright
-      nodePackages.typescript-language-server
+      typescript-language-server
       nil # Nix LSP
       rust-analyzer
 
@@ -21,7 +28,7 @@
       stylua
       shellcheck
       shfmt
-      nodePackages.prettier
+      prettier
       nixfmt
 
       # Build tools needed by some plugins
