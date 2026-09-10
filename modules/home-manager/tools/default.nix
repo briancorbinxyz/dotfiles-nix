@@ -11,6 +11,7 @@
     ./atuin.nix
     ./bat.nix
     ./claude.nix
+    ./codex.nix
     ./fzf.nix
     ./opencode.nix
     ./fnm.nix

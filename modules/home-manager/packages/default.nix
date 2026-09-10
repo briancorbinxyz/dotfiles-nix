@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
@@ -32,6 +37,7 @@
 
     # AI
     aichat
+    codex
 
     # Security
     bitwarden-cli
