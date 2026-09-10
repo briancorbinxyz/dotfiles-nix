@@ -152,6 +152,59 @@ in
           tmux attach-session -t "$session"
         }
 
+        # Nvim + Codex with terminal title (mirrors the nvc/tnvc claude family)
+        nvx() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal codex'
+        }
+        nvxh() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'split | terminal codex'
+        }
+        nvx2() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal codex' -c 'split | terminal codex'
+        }
+        nvx22() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'vsplit | terminal codex' -c 'vsplit | terminal codex' -c 'wincmd h | split | terminal codex' -c 'wincmd l | split | terminal codex'
+        }
+        nvx4() {
+          local name="$(_nvim_title)"
+          nvim . -c "lua vim.opt.title=true; vim.opt.titlestring='nvim: $name'" -c 'terminal codex' -c 'vsplit | terminal codex' -c 'split | terminal codex' -c 'wincmd h | split | terminal codex'
+        }
+        tnvx() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}"
+          tmux new-session -d -s "$session" 'nvim .'
+          tmux split-window -t "$session" -h -l 50% 'codex'
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
+        }
+        tnvx2() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}"
+          tmux new-session -d -s "$session" 'nvim .'
+          tmux split-window -t "$session" -h -l 50% 'codex'
+          tmux split-window -t "$session" -v 'codex'
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
+        }
+        tnvx4() {
+          local name="$(_nvim_title)"
+          local session="''${name//-/_}"
+          tmux new-session -d -s "$session" 'nvim .'
+          tmux split-window -t "$session" -h -l 66% 'codex'
+          tmux split-window -t "$session" -h -l 50% 'codex'
+          tmux select-pane -t "$session" -L
+          tmux split-window -t "$session" -v 'codex'
+          tmux select-pane -t "$session" -R
+          tmux split-window -t "$session" -v 'codex'
+          tmux select-pane -t "$session" -L
+          tmux select-pane -t "$session" -L
+          tmux attach-session -t "$session"
+        }
+
         # Debug tmux sessions
         tdebug() {
           local session="debug"
