@@ -122,7 +122,7 @@ in
         }
         tnvc() {
           local name="$(_nvim_title)"
-          local session="''${name//-/_}"
+          local session="''${name//-/_}_c1"
           tmux new-session -d -s "$session" 'nvim .'
           tmux split-window -t "$session" -h -l 50% 'claude'
           tmux select-pane -t "$session" -L
@@ -130,7 +130,7 @@ in
         }
         tnvc2() {
           local name="$(_nvim_title)"
-          local session="''${name//-/_}"
+          local session="''${name//-/_}_c2"
           tmux new-session -d -s "$session" 'nvim .'
           tmux split-window -t "$session" -h -l 50% 'claude'
           tmux split-window -t "$session" -v 'claude'
@@ -139,7 +139,7 @@ in
         }
         tnvc4() {
           local name="$(_nvim_title)"
-          local session="''${name//-/_}"
+          local session="''${name//-/_}_c4"
           tmux new-session -d -s "$session" 'nvim .'
           tmux split-window -t "$session" -h -l 66% 'claude'
           tmux split-window -t "$session" -h -l 50% 'claude'
@@ -175,7 +175,7 @@ in
         }
         tnvx() {
           local name="$(_nvim_title)"
-          local session="''${name//-/_}"
+          local session="''${name//-/_}_x1"
           tmux new-session -d -s "$session" 'nvim .'
           tmux split-window -t "$session" -h -l 50% 'codex'
           tmux select-pane -t "$session" -L
@@ -183,7 +183,7 @@ in
         }
         tnvx2() {
           local name="$(_nvim_title)"
-          local session="''${name//-/_}"
+          local session="''${name//-/_}_x2"
           tmux new-session -d -s "$session" 'nvim .'
           tmux split-window -t "$session" -h -l 50% 'codex'
           tmux split-window -t "$session" -v 'codex'
@@ -192,7 +192,7 @@ in
         }
         tnvx4() {
           local name="$(_nvim_title)"
-          local session="''${name//-/_}"
+          local session="''${name//-/_}_x4"
           tmux new-session -d -s "$session" 'nvim .'
           tmux split-window -t "$session" -h -l 66% 'codex'
           tmux split-window -t "$session" -h -l 50% 'codex'
