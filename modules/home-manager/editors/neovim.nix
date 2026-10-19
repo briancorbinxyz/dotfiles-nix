@@ -14,6 +14,11 @@
     withRuby = true;
     withPython3 = true;
 
+    # The provider settings home-manager generates (ruby/python3 host progs)
+    # would otherwise be written to ~/.config/nvim/init.lua, which collides
+    # with the out-of-store symlink below. Load them via the wrapper instead.
+    sideloadInitLua = true;
+
     # Neovim plugins are managed by lazy.nvim, not Nix
     # We just ensure dependencies are available
     extraPackages = with pkgs; [
