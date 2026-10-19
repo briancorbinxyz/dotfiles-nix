@@ -39,9 +39,10 @@
     ];
   };
 
-  # Link neovim config directory from dotfiles
-  xdg.configFile."nvim" = {
-    source = ../../../dotfiles/nvim;
-    recursive = true;
-  };
+  # Link ~/.config/nvim straight to the live checkout rather than a Nix store
+  # copy, so lazy.nvim can write lazy-lock.json (and LazyVim lazyvim.json)
+  # back into the repo, where the changes can be committed. Assumes the repo
+  # lives at ~/dotfiles-nix, which is where install.sh clones it.
+  xdg.configFile."nvim".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles-nix/dotfiles/nvim";
 }
