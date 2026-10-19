@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Cross-platform dotfiles repository using **Nix flakes** with **home-manager** and **nix-darwin**. Supports Apple Silicon Mac, x86_64 Linux, ARM Linux (Raspberry Pi), and Steam Deck.
+Cross-platform dotfiles repository using **Nix flakes** with **home-manager** and **nix-darwin**. Supports Apple Silicon Mac, x86_64 Linux, ARM Linux (Raspberry Pi), Steam Deck, and WSL2.
 
 ## Common Commands
 
@@ -34,6 +34,12 @@ Steam Deck (uses `deck` persona):
 ```bash
 nix run home-manager/master -- switch --flake ~/dotfiles-nix#steamdeck  # first time
 home-manager switch --flake ~/dotfiles-nix#steamdeck  # updates
+```
+
+WSL2 on Windows (CLI only, no Linux GUI apps):
+```bash
+nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#wsl  # first time
+home-manager switch --impure --flake ~/dotfiles-nix#wsl  # updates
 ```
 
 ### Development & Validation
@@ -68,7 +74,8 @@ flake.nix                           # Entry point - defines all host configurati
 ├── hosts/
 │   ├── aarch64-darwin/default.nix  # macOS: nix-darwin system settings + Homebrew
 │   ├── x86_64-linux/default.nix    # Linux x86_64: standalone home-manager
-│   └── aarch64-linux/default.nix   # Linux ARM: lighter config for Pi, etc.
+│   ├── aarch64-linux/default.nix   # Linux ARM: lighter config for Pi, etc.
+│   └── wsl/default.nix             # WSL2: x86_64 Linux without GUI apps (nominix.wsl.enable)
 ├── personas/                       # User personas (name, email, etc.)
 │   ├── briancorbin.nix             # Default persona
 │   └── deck.nix                    # Steam Deck persona

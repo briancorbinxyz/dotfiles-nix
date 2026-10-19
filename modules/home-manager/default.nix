@@ -7,6 +7,7 @@
     ./terminal
     ./tools
     ./packages
+    ./wsl.nix
   ];
 
   programs.home-manager.enable = true;

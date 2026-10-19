@@ -10,6 +10,7 @@ Cross-platform dotfiles managed with Nix flakes and home-manager.
 | `x86_64-linux` | Intel/AMD Linux | standalone home-manager |
 | `steamdeck` | Steam Deck | standalone home-manager with `deck` persona (see [Steam Deck](#steam-deck)) |
 | `aarch64-linux` | ARM Linux (Pi, etc.) | standalone home-manager |
+| `wsl` | WSL2 on Windows (x86_64) | standalone home-manager, CLI only (see [WSL](#wsl)) |
 
 ## Installation
 
@@ -104,6 +105,28 @@ home-manager switch --flake ~/dotfiles-nix#steamdeck
 
 > **Note**: SteamOS updates may reset the filesystem. You may need to repeat these steps after major system updates.
 
+### WSL
+
+The `wsl` configuration is the x86_64 Linux setup without the Linux GUI side: no Alacritty, Ghostty, Obsidian, Dropbox, nixGL, Nerd Fonts or Ollama, since Windows provides the terminal, fonts and GUI apps. `copy`/`paste` use the Windows clipboard, `open` runs `explorer.exe`, and `BROWSER` is `wslview` (or `explorer.exe` if wslu is missing).
+
+1. From an admin PowerShell, enable WSL and install Ubuntu (enable virtualization in your BIOS first if `wsl --status` asks for it):
+```powershell
+wsl --install --no-distribution
+wsl --install Ubuntu
+```
+
+2. Inside Ubuntu, run the [Quick Install](#quick-install-recommended). It detects WSL and applies `#wsl`. Ubuntu on WSL runs systemd by default, which the Nix daemon needs.
+
+3. On Windows, install [MesloLGS Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases) and set it as the Ubuntu profile's font in Windows Terminal, so the prompt glyphs render.
+
+```bash
+# First time
+nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#wsl
+
+# Subsequent updates
+home-manager switch --impure --flake ~/dotfiles-nix#wsl
+```
+
 ## Structure
 
 ```
@@ -112,7 +135,8 @@ dotfiles-nix/
 ├── hosts/                       # Host-specific configurations
 │   ├── aarch64-darwin/          # macOS Apple Silicon
 │   ├── x86_64-linux/            # Linux x86_64 (+ Steam Deck)
-│   └── aarch64-linux/           # Linux ARM64
+│   ├── aarch64-linux/           # Linux ARM64
+│   └── wsl/                     # WSL2 on Windows (CLI only)
 ├── personas/                    # User personas (briancorbin, deck, etc.)
 ├── modules/home-manager/        # Shared home-manager modules
 │   ├── shell/                   # Zsh, aliases

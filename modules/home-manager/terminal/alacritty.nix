@@ -4,7 +4,7 @@
   # On macOS, alacritty is installed via Homebrew cask
   # On Linux, it's installed via packages/linux.nix
   programs.alacritty = {
-    enable = pkgs.stdenv.isLinux;
+    enable = pkgs.stdenv.isLinux && !config.nominix.wsl.enable;
   };
 
   # Configuration file (works on both platforms)

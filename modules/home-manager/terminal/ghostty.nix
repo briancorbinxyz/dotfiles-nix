@@ -27,8 +27,8 @@
     shell-integration = zsh
   '';
 
-  # Desktop entry for Linux with nixGL wrapper
-  xdg.desktopEntries = lib.mkIf pkgs.stdenv.isLinux {
+  # Desktop entry for Linux with nixGL wrapper (not on WSL, where ghostty is not installed)
+  xdg.desktopEntries = lib.mkIf (pkgs.stdenv.isLinux && !config.nominix.wsl.enable) {
     ghostty = {
       name = "Ghostty";
       comment = "A terminal emulator";

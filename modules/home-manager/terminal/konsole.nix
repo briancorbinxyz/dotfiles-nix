@@ -4,7 +4,7 @@
   # Konsole profile with matching font (Linux/Steam Deck only)
   # Note: Only create the profile, not konsolerc (Konsole needs write access to it)
   # Set as default manually: Settings → Manage Profiles → Set "Nix" as Default
-  xdg.dataFile = lib.mkIf pkgs.stdenv.isLinux {
+  xdg.dataFile = lib.mkIf (pkgs.stdenv.isLinux && !config.nominix.wsl.enable) {
     "konsole/Nix.profile".text = ''
       [Appearance]
       ColorScheme=Breeze

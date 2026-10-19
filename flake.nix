@@ -131,6 +131,20 @@
         ];
       };
 
+      # WSL2 on Windows (x86_64-linux, CLI only)
+      homeConfigurations."wsl" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor "x86_64-linux";
+        extraSpecialArgs = {
+          inherit inputs;
+          user = defaultUser;
+          nixglPkgs = nixgl.packages.x86_64-linux;
+        };
+        modules = commonHomeModules ++ [
+          ./hosts/wsl
+          ./modules/home-manager/packages/linux.nix
+        ];
+      };
+
       # Dev shells for all systems
       devShells = forAllSystems (system:
         let pkgs = pkgsFor system;
