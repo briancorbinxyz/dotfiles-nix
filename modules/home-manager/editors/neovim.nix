@@ -50,4 +50,16 @@
   # lives at ~/dotfiles-nix, which is where install.sh clones it.
   xdg.configFile."nvim".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles-nix/dotfiles/nvim";
+
+  # Migration: earlier generations linked the config recursively, leaving
+  # ~/.config/nvim as a real directory of store links that home-manager will
+  # not replace with a symlink. Remove it only if it holds nothing else.
+  home.activation.migrateNvimConfigDir = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    nvimDir="${config.xdg.configHome}/nvim"
+    if [ -d "$nvimDir" ] && [ ! -L "$nvimDir" ] \
+      && [ -z "$(find "$nvimDir" ! -type d ! -lname '/nix/store/*' -print -quit)" ]; then
+      verboseEcho "Removing old recursively linked $nvimDir"
+      run rm -rf "$nvimDir"
+    fi
+  '';
 }
