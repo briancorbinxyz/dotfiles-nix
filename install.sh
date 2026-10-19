@@ -51,6 +51,9 @@ detect_platform() {
             # Detect Steam Deck by username
             if [[ "$USER" == "deck" ]]; then
                 echo "steamdeck"
+            # Detect WSL2 by its kernel release string
+            elif [[ "$arch" == "x86_64" ]] && grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null; then
+                echo "wsl"
             else
                 echo "${arch}-linux"
             fi
@@ -168,7 +171,7 @@ apply_config() {
             sudo NOMINIX_USER="${NOMINIX_USER:-}" NOMINIX_FULLNAME="${NOMINIX_FULLNAME:-}" NOMINIX_EMAIL="${NOMINIX_EMAIL:-}" \
                 nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --impure --flake "$DOTFILES_DIR#aarch64-darwin"
             ;;
-        steamdeck|*-linux)
+        steamdeck|wsl|*-linux)
             info "Running home-manager setup..."
             # --impure needed for nixGL GPU driver detection and NOMINIX_* variables
             nix run home-manager/master -- switch -b backup --impure --flake "$DOTFILES_DIR#$platform"

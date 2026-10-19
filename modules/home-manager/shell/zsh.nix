@@ -8,7 +8,10 @@
 }:
 
 let
-  aliases = import ./aliases.nix { inherit pkgs lib; };
+  aliases = import ./aliases.nix {
+    inherit pkgs lib;
+    isWsl = config.nominix.wsl.enable;
+  };
 in
 {
   programs.zsh = {

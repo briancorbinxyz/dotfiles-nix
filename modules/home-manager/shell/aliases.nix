@@ -1,5 +1,12 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, isWsl ? false, ... }:
 
+let
+  # Flake output for Linux rebuilds: fixed on WSL, otherwise Steam Deck or by architecture
+  linuxTarget =
+    if isWsl
+    then "wsl"
+    else ''$([ "$USER" = "deck" ] && echo steamdeck || echo $(uname -m)-linux)'';
+in
 {
   # Modern tool replacements
   cat = "bat";
@@ -109,16 +116,22 @@
   nix-update = "nix flake update && sudo darwin-rebuild switch --flake .#aarch64-darwin";
 } // lib.optionalAttrs pkgs.stdenv.isLinux {
   # Linux-specific aliases
+  ports = "ss -tuln";
+
+  # Nix rebuild (WSL, else auto-detects architecture and Steam Deck)
+  # --impure needed for nixGL GPU driver detection
+  nix-init = "nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#${linuxTarget}";
+  nix-rebuild = "home-manager switch --impure --flake ~/dotfiles-nix#${linuxTarget}";
+  nix-update = "nix flake update && home-manager switch --flake .#${linuxTarget}";
+} // lib.optionalAttrs (pkgs.stdenv.isLinux && !isWsl) {
   copy = "xclip -selection clipboard";
   paste = "xclip -selection clipboard -o";
-  ports = "ss -tuln";
 
   # OpenGL wrapper for GUI apps on non-NixOS
   ghostty = "nixGL ghostty";
-
-  # Nix rebuild (auto-detects architecture and Steam Deck)
-  # --impure needed for nixGL GPU driver detection
-  nix-init = "nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
-  nix-rebuild = "home-manager switch --impure --flake ~/dotfiles-nix#$([ \"$USER\" = \"deck\" ] && echo steamdeck || echo $(uname -m)-linux)";
-  nix-update = "nix flake update && home-manager switch --flake .#$(uname -m)-linux";
+} // lib.optionalAttrs isWsl {
+  # Windows clipboard and default apps
+  copy = "clip.exe";
+  paste = "powershell.exe -NoProfile -Command Get-Clipboard | tr -d '\\r'";
+  open = "explorer.exe";
 }
