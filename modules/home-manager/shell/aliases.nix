@@ -23,6 +23,11 @@ in
   # Rust REPL
   repl = "evcxr";
 
+  # Benchmarking (hyperfine)
+  bench = "hyperfine --warmup 3";
+  benchn = "hyperfine --warmup 3 -N";
+  benchmd = "hyperfine --warmup 3 --export-markdown";
+
   # Git shortcuts
   g = "git";
   ga = "git add";
