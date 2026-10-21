@@ -68,6 +68,7 @@
     # CLI tools that work better via Homebrew on macOS
     brews = [
       "asdf"
+      "awscli"
       "gemini-cli"
       "mas"
       "node"
@@ -91,6 +92,7 @@
       "obsidian"
       "ollama-app"
       "podman-desktop"
+      "session-manager-plugin"
       "tailscale-app"
       "termius"
       "visual-studio-code"
