@@ -96,7 +96,7 @@ flake.nix                           # Entry point - defines all host configurati
 1. **Platform Detection**: Modules use `pkgs.stdenv.isDarwin` / `pkgs.stdenv.isLinux` for platform-specific settings
 2. **Hybrid Package Management**: Nix for CLI tools, Homebrew for macOS GUI apps (configured in `hosts/aarch64-darwin/default.nix`)
 3. **Modular home-manager**: Organized by function (shell, editors, terminal, tools) not by application
-4. **Raw Dotfiles**: Complex configs like Neovim live in `dotfiles/` and are symlinked via `xdg.configFile`
+4. **Raw Dotfiles**: Complex configs like Neovim live in `dotfiles/` and are symlinked via `xdg.configFile`. Neovim is linked with `mkOutOfStoreSymlink` to the live checkout at `~/dotfiles-nix/dotfiles/nvim` (not a read-only store copy), so lazy.nvim can update `lazy-lock.json` in the repo; edits there take effect without a rebuild, and the repo must live at `~/dotfiles-nix`
 5. **Personas**: User identity (name, email) defined in `personas/` and passed to configurations via `extraSpecialArgs`
 
 ### Common Nix Patterns
