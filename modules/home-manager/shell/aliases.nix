@@ -20,6 +20,9 @@ in
   # Terraform
   tf = "terraform";
 
+  # Rust REPL
+  repl = "evcxr";
+
   # Git shortcuts
   g = "git";
   ga = "git add";

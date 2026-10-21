@@ -35,6 +35,9 @@
     hyperfine
     opencode
 
+    # Rust REPL
+    evcxr
+
     # AI
     aichat
     codex
