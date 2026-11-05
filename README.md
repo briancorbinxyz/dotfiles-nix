@@ -127,6 +127,56 @@ nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#wsl
 home-manager switch --impure --flake ~/dotfiles-nix#wsl
 ```
 
+### llama.cpp server (WSL + RTX 5090)
+
+The `wsl` host enables `nominix.llama` (`modules/home-manager/tools/llama.nix`): it builds `llama-cpp` with CUDA for Blackwell (sm_120) only, wraps the binaries so they find the Windows GPU driver, and runs `llama-server` as a systemd user service bound to the Tailscale address. Binding to the tailnet is what removes the need for a Windows firewall rule, and makes the API key a second lock rather than the only one.
+
+Three prerequisites cannot be declared by home-manager — they need root or a secret:
+
+1. **systemd inside WSL** (user services need it; recent Ubuntu images have it on):
+   ```bash
+   cat /etc/wsl.conf        # want: [boot] systemd=true
+   ```
+   If those lines are missing, add them, run `wsl --shutdown` from Windows, and reopen Ubuntu.
+
+2. **Tailscale**, which needs root for the TUN device and a *system* systemd unit, so it is installed the Ubuntu way rather than with Nix:
+   ```bash
+   curl -fsSL https://tailscale.com/install.sh | sh
+   sudo tailscale up --hostname=llama-5090
+   ```
+
+3. **Lingering**, so the service starts with the distro rather than with your first login:
+   ```bash
+   loginctl enable-linger "$USER"
+   ```
+
+Then rebuild. The first run compiles llama.cpp's CUDA kernels locally — nixpkgs' binary cache has no CUDA variant — so expect tens of minutes:
+
+```bash
+nix-rebuild              # compiles the CUDA kernels, then starts the service (sd-switch)
+exec zsh                 # pick up the new llama-* aliases
+llama-key                # the API key, generated at mode 0600 on first activation
+llama-log                # follow it: the first start downloads the GGUF
+llama-health             # curl /health on the tailnet address
+llama-up / llama-down    # start or stop it by hand
+```
+
+From the Mac, or any other tailnet device:
+
+```bash
+curl http://llama-5090:8080/health
+```
+
+Worth knowing:
+
+- **Models download again.** `-hf` saves GGUFs to `~/.cache/llama.cpp` inside Ubuntu, not to the Windows cache, so a model already pulled on the Windows side is fetched a second time.
+- **A sleeping PC leaves the tailnet.** Set the Windows power plan to never sleep while plugged in.
+- **Lingering is not auto-start.** `enable-linger` keeps the service running with no login session, but only while the WSL VM is up; it does not launch WSL when Windows boots. For that, add a logon scheduled task running `wsl -d Ubuntu -e true`, and remember `wsl --shutdown` stops everything regardless.
+- **The GPU driver comes from Windows.** Nix-built CUDA binaries find `libcuda.so.1` only through `/usr/lib/wsl/lib`, so the module puts that on `LD_LIBRARY_PATH` for the llama.cpp binaries alone. `nixGL` cannot help here: it detects drivers through `/proc/driver/nvidia`, which WSL does not have.
+- **The server sleeps when idle** after 15 minutes (`--sleep-idle-seconds 900`), releasing VRAM; the next request wakes it, so that one is slow.
+- **Flags live in `extraFlags`** on `nominix.llama`, and `llama-serve` passes ad-hoc arguments through to `llama-server`: `llama-serve --port 9090 -c 65536`. Running `llama-serve` in tmux is the easy way to iterate on flags before leaning on the service.
+- **To stop Nix building llama.cpp**, set `nominix.llama.package` to a package of your own (e.g. one wrapping an out-of-band `~/llama.cpp` build) or `nominix.llama.cuda = false` for a CPU build; everything else in the module stays the same.
+
 ## Structure
 
 ```
@@ -174,3 +224,4 @@ dotfiles-nix/
 | `brain-publish` | Sync, commit, and push to deploy the website |
 | `nix-rebuild` | Rebuild nix configuration for current platform |
 | `c` / `cr` / `cx` | Claude Code shortcuts |
+| `llama-up` / `llama-log` / `llama-health` | Control the llama.cpp server on WSL |

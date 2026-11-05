@@ -13,6 +13,7 @@
     ./claude.nix
     ./codex.nix
     ./fzf.nix
+    ./llama.nix
     ./opencode.nix
     ./fnm.nix
     ./starship.nix
