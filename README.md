@@ -177,6 +177,22 @@ Worth knowing:
 - **Flags live in `extraFlags`** on `nominix.llama`, and `llama-serve` passes ad-hoc arguments through to `llama-server`: `llama-serve --port 9090 -c 65536`. Running `llama-serve` in tmux is the easy way to iterate on flags before leaning on the service.
 - **To stop Nix building llama.cpp**, set `nominix.llama.package` to a package of your own (e.g. one wrapping an out-of-band `~/llama.cpp` build) or `nominix.llama.cuda = false` for a CPU build; everything else in the module stays the same.
 
+#### From opencode
+
+`modules/home-manager/tools/opencode.nix` registers the server as an OpenAI-compatible provider on every host, deriving the URL, model id and context size from `nominix.llama` so client and server cannot drift. It is added as a *choice*, not the default — pick it with `/models` in opencode, or set `model = "llama/qwen3.6-35b"` in that module to make it the default.
+
+The key cannot live in `config.json` (a world-readable store symlink), so the provider reads `{env:LLAMA_API_KEY}`. Add it on each client to the env file zsh already sources:
+
+```bash
+# on the WSL box, where the key was generated
+echo 'export LLAMA_API_KEY="$(cat ~/.config/nominix/llama-api-key)"' >> ~/.config/nominix/env
+
+# on the Mac, or any other client
+echo 'export LLAMA_API_KEY=<paste from `llama-key`>' >> ~/.config/nominix/env
+```
+
+An unset variable resolves to an empty string rather than an error, so a machine without the key still starts opencode normally — the provider just fails to authenticate. The first run also installs `@ai-sdk/openai-compatible` into `~/.config/opencode/node_modules`, which needs network once.
+
 ## Structure
 
 ```

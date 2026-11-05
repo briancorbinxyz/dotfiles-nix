@@ -231,6 +231,18 @@ in
       description = "Port to listen on.";
     };
 
+    clientHost = lib.mkOption {
+      type = lib.types.str;
+      default = "llama-5090";
+      description = ''
+        MagicDNS name clients dial to reach this server, i.e. the Tailscale
+        machine name. Only clients use it — the server itself binds to the
+        address, not the name — so it is read on every host, including those
+        where this module is disabled (see tools/opencode.nix). Rename the node
+        with `tailscale set --hostname=...` and change this to match.
+      '';
+    };
+
     apiKeyFile = lib.mkOption {
       type = lib.types.str;
       default = "${config.xdg.configHome}/nominix/llama-api-key";
