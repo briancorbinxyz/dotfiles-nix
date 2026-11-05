@@ -78,11 +78,11 @@ home.packages = with pkgs; [ git neovim ];
   programs.tool.enable = true;
   
   # Conditional platform settings
-  ${lib.optionalString pkgs.stdenv.isDarwin ''
+  ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
     # macOS-specific
   ''}
   
-  ${lib.optionalString pkgs.stdenv.isLinux ''
+  ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
     # Linux-specific  
   ''}
 }
@@ -103,11 +103,11 @@ home.packages = with pkgs; [ git neovim ];
 ### Platform Detection
 ```nix
 # Standard pattern
-${lib.optionalString pkgs.stdenv.isDarwin ''
+${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
   # macOS-specific configuration
 ''}
 
-${lib.optionalString pkgs.stdenv.isLinux ''
+${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
   # Linux-specific configuration
 ''}
 ```
@@ -169,9 +169,9 @@ home.packages = with pkgs; [
   git neovim
   
   # Platform-specific
-] ++ lib.optionals pkgs.stdenv.isDarwin [
+] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
   # macOS-only packages
-] ++ lib.optionals pkgs.stdenv.isLinux [
+] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
   # Linux-only packages
 ];
 ```
@@ -182,11 +182,11 @@ shellAliases = {
   # Common aliases
   ll = "lsd -la";
   
-} // lib.optionalAttrs pkgs.stdenv.isDarwin {
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
   # macOS aliases
   copy = "pbcopy";
   
-} // lib.optionalAttrs pkgs.stdenv.isLinux {
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
   # Linux aliases  
   copy = "xclip -selection clipboard";
 };

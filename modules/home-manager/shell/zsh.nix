@@ -241,7 +241,7 @@ in
           tmux attach-session -t "$session"
         }
 
-        ${lib.optionalString pkgs.stdenv.isDarwin ''
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
           # Homebrew
           eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -272,7 +272,7 @@ in
           export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
         ''}
 
-        ${lib.optionalString pkgs.stdenv.isLinux ''
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
           # Linux-specific initialization
           export PATH="$HOME/.local/bin:$PATH"
         ''}

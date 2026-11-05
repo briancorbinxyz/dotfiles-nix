@@ -93,7 +93,7 @@ flake.nix                           # Entry point - defines all host configurati
 
 ### Key Design Patterns
 
-1. **Platform Detection**: Modules use `pkgs.stdenv.isDarwin` / `pkgs.stdenv.isLinux` for platform-specific settings
+1. **Platform Detection**: Modules use `pkgs.stdenv.hostPlatform.isDarwin` / `pkgs.stdenv.hostPlatform.isLinux` for platform-specific settings
 2. **Hybrid Package Management**: Nix for CLI tools, Homebrew for macOS GUI apps (configured in `hosts/aarch64-darwin/default.nix`)
 3. **Modular home-manager**: Organized by function (shell, editors, terminal, tools) not by application
 4. **Raw Dotfiles**: Complex configs like Neovim live in `dotfiles/` and are symlinked via `xdg.configFile`
@@ -105,9 +105,9 @@ Platform-specific packages:
 ```nix
 home.packages = with pkgs; [
   git neovim  # cross-platform
-] ++ lib.optionals pkgs.stdenv.isDarwin [
+] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
   # macOS-only
-] ++ lib.optionals pkgs.stdenv.isLinux [
+] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
   # Linux-only
 ];
 ```
@@ -116,16 +116,16 @@ Platform-specific aliases:
 ```nix
 shellAliases = {
   ll = "lsd -la";  # common
-} // lib.optionalAttrs pkgs.stdenv.isDarwin {
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
   copy = "pbcopy";
-} // lib.optionalAttrs pkgs.stdenv.isLinux {
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
   copy = "xclip -selection clipboard";
 };
 ```
 
 Conditional configuration strings:
 ```nix
-${lib.optionalString pkgs.stdenv.isDarwin ''
+${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
   # macOS-specific config
 ''}
 ```

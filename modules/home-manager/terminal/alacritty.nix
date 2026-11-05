@@ -4,7 +4,7 @@
   # On macOS, alacritty is installed via Homebrew cask
   # On Linux, it's installed via packages/linux.nix
   programs.alacritty = {
-    enable = pkgs.stdenv.isLinux && !config.nominix.wsl.enable;
+    enable = pkgs.stdenv.hostPlatform.isLinux && !config.nominix.wsl.enable;
   };
 
   # Configuration file (works on both platforms)
@@ -18,13 +18,13 @@
     decorations = "Buttonless"
     opacity = 0.7
     blur = true
-    ${lib.optionalString pkgs.stdenv.isDarwin ''
+    ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
     option_as_alt = "Both"
     ''}
 
     [font]
     normal.family = "MesloLGS Nerd Font Mono"
-    size = ${if pkgs.stdenv.isDarwin then "14" else "12"}
+    size = ${if pkgs.stdenv.hostPlatform.isDarwin then "14" else "12"}
 
     [colors.primary]
     background = "#1a1b26"

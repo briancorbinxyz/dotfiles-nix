@@ -5,7 +5,7 @@
   xdg.configFile."ghostty/config".text = ''
     # Font
     font-family = MesloLGS Nerd Font Mono
-    font-size = ${if pkgs.stdenv.isDarwin then "14" else "12"}
+    font-size = ${if pkgs.stdenv.hostPlatform.isDarwin then "14" else "12"}
 
     # Window
     window-padding-x = 10
@@ -14,7 +14,7 @@
     background-opacity = 0.7
     background-blur-radius = 20
 
-    ${lib.optionalString pkgs.stdenv.isDarwin ''
+    ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
     # macOS specific
     macos-option-as-alt = true
     ''}
@@ -28,7 +28,7 @@
   '';
 
   # Desktop entry for Linux with nixGL wrapper (not on WSL, where ghostty is not installed)
-  xdg.desktopEntries = lib.mkIf (pkgs.stdenv.isLinux && !config.nominix.wsl.enable) {
+  xdg.desktopEntries = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && !config.nominix.wsl.enable) {
     ghostty = {
       name = "Ghostty";
       comment = "A terminal emulator";

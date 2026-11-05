@@ -112,7 +112,7 @@ in
   # Config editing
   zshrc = "nvim ~/.zshrc";
   reload = "source ~/.zshrc";
-} // lib.optionalAttrs pkgs.stdenv.isDarwin {
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
   # macOS-specific aliases
   copy = "pbcopy";
   paste = "pbpaste";
@@ -122,7 +122,7 @@ in
   nix-init = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
   nix-rebuild = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" darwin-rebuild switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
   nix-update = "nix flake update && sudo darwin-rebuild switch --flake .#aarch64-darwin";
-} // lib.optionalAttrs pkgs.stdenv.isLinux {
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
   # Linux-specific aliases
   ports = "ss -tuln";
 
@@ -131,7 +131,7 @@ in
   nix-init = "nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#${linuxTarget}";
   nix-rebuild = "home-manager switch --impure --flake ~/dotfiles-nix#${linuxTarget}";
   nix-update = "nix flake update && home-manager switch --flake .#${linuxTarget}";
-} // lib.optionalAttrs (pkgs.stdenv.isLinux && !isWsl) {
+} // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && !isWsl) {
   copy = "xclip -selection clipboard";
   paste = "xclip -selection clipboard -o";
 
