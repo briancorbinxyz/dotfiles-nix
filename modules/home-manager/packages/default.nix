@@ -56,5 +56,6 @@
     unzip
     htop
     btop
+    wakeonlan
   ];
 }
