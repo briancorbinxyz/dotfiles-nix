@@ -1,4 +1,10 @@
-{ config, pkgs, lib, user, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  user,
+  ...
+}:
 
 {
   programs.git = {
@@ -29,6 +35,20 @@
         last = "log -1 HEAD";
       };
     };
+
+    # A repo with a GitHub remote commits as the GitHub noreply address, so a push is never
+    # refused for exposing a private one.
+    includes = lib.optionals ((user.githubEmail or null) != null) (
+      map
+        (url: {
+          condition = "hasconfig:remote.*.url:${url}";
+          contents.user.email = user.githubEmail;
+        })
+        [
+          "https://github.com/**"
+          "git@github.com:*/**"
+        ]
+    );
 
     ignores = [
       ".DS_Store"

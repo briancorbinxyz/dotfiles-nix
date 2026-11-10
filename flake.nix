@@ -59,6 +59,8 @@
           name = envUser;
           fullName = if envFullName != "" then envFullName else envUser;
           email = if envEmail != "" then envEmail else personas.briancorbin.email;
+          # Only the persona's own user keeps its GitHub noreply address.
+          githubEmail = if envUser == personas.briancorbin.name then personas.briancorbin.githubEmail else null;
         } else {}
       );
 
