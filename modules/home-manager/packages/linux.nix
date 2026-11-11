@@ -7,34 +7,53 @@
 }:
 
 {
-  home.packages = with pkgs; [
-    # Development tools that work well via Nix on Linux
-    rustup
-    terraform
-    nodejs
-  ] ++ lib.optionals (!config.nominix.wsl.enable) [
-    # Desktop Linux only: on WSL, Windows provides the terminal, fonts, clipboard and GUI
-
-    # Terminal emulator (on macOS this is installed via Homebrew cask)
-    alacritty
-
-    # Fonts (Nerd Font for starship prompt glyphs)
-    nerd-fonts.meslo-lg
-
-    # Clipboard utilities
-    xclip
-    xdg-utils
-
-    # Graphics/OpenGL wrapper (needed for GUI apps on non-NixOS systems like Steam Deck)
-    # Run apps with: nixGLDefault ghostty
-    nixglPkgs.nixGLDefault
-
-    # AI (on macOS installed via Homebrew cask; on WSL run the Windows install)
-    ollama
-
-    # GUI apps (on macOS these are installed via Homebrew cask)
-    ghostty
-    obsidian
-    dropbox
+  # Terminfo for the terminal emulators we SSH *in from*. The client forwards
+  # its own $TERM (e.g. xterm-ghostty); if this machine has no matching entry,
+  # zsh gets no cursor-movement capabilities and every ZLE repaint lands in the
+  # wrong column — characters visibly duplicate as you type. Needed on WSL and
+  # headless boxes too, where the emulators themselves are never installed.
+  home.sessionVariables.TERMINFO_DIRS = lib.concatStringsSep ":" [
+    "${config.home.profileDirectory}/share/terminfo"
+    "/usr/share/terminfo"
+    "/lib/terminfo"
+    "/etc/terminfo"
   ];
+
+  home.packages =
+    with pkgs;
+    [
+      # Development tools that work well via Nix on Linux
+      rustup
+      terraform
+      nodejs
+
+      # See TERMINFO_DIRS above — database entries only, not the emulators.
+      ghostty.terminfo
+      alacritty.terminfo
+    ]
+    ++ lib.optionals (!config.nominix.wsl.enable) [
+      # Desktop Linux only: on WSL, Windows provides the terminal, fonts, clipboard and GUI
+
+      # Terminal emulator (on macOS this is installed via Homebrew cask)
+      alacritty
+
+      # Fonts (Nerd Font for starship prompt glyphs)
+      nerd-fonts.meslo-lg
+
+      # Clipboard utilities
+      xclip
+      xdg-utils
+
+      # Graphics/OpenGL wrapper (needed for GUI apps on non-NixOS systems like Steam Deck)
+      # Run apps with: nixGLDefault ghostty
+      nixglPkgs.nixGLDefault
+
+      # AI (on macOS installed via Homebrew cask; on WSL run the Windows install)
+      ollama
+
+      # GUI apps (on macOS these are installed via Homebrew cask)
+      ghostty
+      obsidian
+      dropbox
+    ];
 }
