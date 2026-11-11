@@ -26,12 +26,14 @@
         error_fg = "#f7768e"; # red
         fg_dark = "#1a1b26"; # bg — near-black text for bright segments
         fg_light = "#c0caf5"; # fg — light text for the dark os badge
+        host_fg = "#ff9e64"; # orange — remote hostname, flags "not local"
         gap_fg = "#565f89"; # comment — fill dashes
       };
 
       format = lib.concatStrings [
         "[](fg:os_bg)"
         "$os"
+        "$hostname"
         "[](fg:os_bg bg:dir_bg)"
         "$directory"
         "[](fg:dir_bg bg:git_bg)"
@@ -67,6 +69,16 @@
           Arch = "󰣇 ";
           NixOS = " ";
         };
+      };
+
+      # Only renders over SSH (ssh_only defaults to true). It shares the os
+      # badge's background so it extends that segment instead of needing its
+      # own powerline separators — the local prompt is unchanged.
+      hostname = {
+        ssh_only = true;
+        ssh_symbol = "󰣀 ";
+        style = "bg:os_bg fg:host_fg bold";
+        format = "[$ssh_symbol$hostname ]($style)";
       };
 
       directory = {
