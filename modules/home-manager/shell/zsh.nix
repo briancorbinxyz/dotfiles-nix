@@ -45,10 +45,12 @@ in
 
     shellAliases = aliases;
 
-    # Set before plugin loads for real-time timer updates
-    sessionVariables = {
-      POMODORO_REALTIME = "true";
-    };
+    # POMODORO_REALTIME is deliberately NOT set. It makes the pomo plugin arm
+    # TMOUT=1 + TRAPALRM, firing `zle reset-prompt` every second for the whole
+    # life of the shell, pomodoro running or not. That repaint races anything
+    # else drawing to the terminal: it corrupts atuin's full-screen history
+    # TUI and duplicates characters as you type. Run `pomo_enable_realtime`
+    # by hand if you ever want the live timer back.
 
     initContent = lib.mkMerge [
       ''
