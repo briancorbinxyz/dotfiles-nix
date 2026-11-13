@@ -221,7 +221,7 @@ dotfiles-nix/
 - Editor: Neovim with LSP dependencies
 
 ### Via Homebrew (macOS only)
-- GUI apps: Alacritty, Ghostty, Docker Desktop, VS Code, Obsidian, etc.
+- GUI apps: Alacritty, Ghostty, Podman Desktop, Rancher Desktop, VS Code, Obsidian, etc.
 - CLI tools: asdf, gemini-cli, mas, node, pixi, pyenv, rust, terraform
 - Fonts: MesloLGS Nerd Font
 

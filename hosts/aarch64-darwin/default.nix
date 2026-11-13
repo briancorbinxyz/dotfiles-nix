@@ -92,6 +92,7 @@
       "obsidian"
       "ollama-app"
       "podman-desktop"
+      "rancher"
       "session-manager-plugin"
       "tailscale-app"
       "termius"
