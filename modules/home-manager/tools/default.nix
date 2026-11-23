@@ -12,6 +12,7 @@
     ./bat.nix
     ./claude.nix
     ./codex.nix
+    ./direnv.nix
     ./fzf.nix
     ./llama.nix
     ./opencode.nix
