@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Ghostty config (macOS via Homebrew cask, Linux when available)
@@ -15,8 +20,8 @@
     background-blur-radius = 20
 
     ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-    # macOS specific
-    macos-option-as-alt = true
+      # macOS specific
+      macos-option-as-alt = true
     ''}
 
     # Theme
@@ -36,7 +41,10 @@
       icon = "ghostty";
       terminal = false;
       type = "Application";
-      categories = [ "System" "TerminalEmulator" ];
+      categories = [
+        "System"
+        "TerminalEmulator"
+      ];
     };
   };
 }

@@ -1,4 +1,10 @@
-{ config, pkgs, lib, user, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  user,
+  ...
+}:
 
 {
   imports = [
@@ -15,9 +21,7 @@
   home = {
     username = user.name;
     homeDirectory =
-      if pkgs.stdenv.hostPlatform.isDarwin
-      then "/Users/${user.name}"
-      else "/home/${user.name}";
+      if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${user.name}" else "/home/${user.name}";
     stateVersion = "24.05";
 
     sessionVariables = {

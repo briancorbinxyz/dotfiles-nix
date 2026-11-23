@@ -25,7 +25,15 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-darwin, nixgl, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      nix-darwin,
+      nixgl,
+      ...
+    }:
     let
       supportedSystems = [
         "aarch64-darwin"
@@ -39,10 +47,12 @@
 
       overlays = [ ];
 
-      pkgsFor = system: import nixpkgs {
-        inherit system overlays;
-        config.allowUnfree = true;
-      };
+      pkgsFor =
+        system:
+        import nixpkgs {
+          inherit system overlays;
+          config.allowUnfree = true;
+        };
 
       commonHomeModules = [
         ./modules/home-manager
@@ -54,21 +64,31 @@
       envFullName = builtins.getEnv "NOMINIX_FULLNAME";
       envEmail = builtins.getEnv "NOMINIX_EMAIL";
 
-      defaultUser = personas.briancorbin // (
-        if envUser != "" then {
-          name = envUser;
-          fullName = if envFullName != "" then envFullName else envUser;
-          email = if envEmail != "" then envEmail else personas.briancorbin.email;
-          # Only the persona's own user keeps its GitHub noreply address.
-          githubEmail = if envUser == personas.briancorbin.name then personas.briancorbin.githubEmail else null;
-        } else {}
-      );
+      defaultUser =
+        personas.briancorbin
+        // (
+          if envUser != "" then
+            {
+              name = envUser;
+              fullName = if envFullName != "" then envFullName else envUser;
+              email = if envEmail != "" then envEmail else personas.briancorbin.email;
+              # Only the persona's own user keeps its GitHub noreply address.
+              githubEmail =
+                if envUser == personas.briancorbin.name then personas.briancorbin.githubEmail else null;
+            }
+          else
+            { }
+        );
 
-    in {
+    in
+    {
       # macOS (aarch64-darwin)
       darwinConfigurations."aarch64-darwin" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        specialArgs = { inherit inputs; user = defaultUser; };
+        specialArgs = {
+          inherit inputs;
+          user = defaultUser;
+        };
         modules = [
           ./hosts/aarch64-darwin
           home-manager.darwinModules.home-manager
@@ -77,7 +97,10 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "backup";
-              extraSpecialArgs = { inherit inputs; user = defaultUser; };
+              extraSpecialArgs = {
+                inherit inputs;
+                user = defaultUser;
+              };
               users.${defaultUser.name} = { pkgs, lib, ... }: {
                 imports = commonHomeModules ++ [
                   ./modules/home-manager/packages/darwin.nix
@@ -148,11 +171,17 @@
       };
 
       # Dev shells for all systems
-      devShells = forAllSystems (system:
-        let pkgs = pkgsFor system;
-        in {
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = pkgsFor system;
+        in
+        {
           default = pkgs.mkShell {
-            buildInputs = with pkgs; [ git nixfmt ];
+            buildInputs = with pkgs; [
+              git
+              nixfmt
+            ];
           };
         }
       );

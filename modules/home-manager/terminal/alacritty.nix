@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # On macOS, alacritty is installed via Homebrew cask
@@ -19,7 +24,7 @@
     opacity = 0.7
     blur = true
     ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-    option_as_alt = "Both"
+      option_as_alt = "Both"
     ''}
 
     [font]

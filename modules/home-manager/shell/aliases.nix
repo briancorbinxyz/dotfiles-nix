@@ -1,11 +1,14 @@
-{ pkgs, lib, isWsl ? false, ... }:
+{
+  pkgs,
+  lib,
+  isWsl ? false,
+  ...
+}:
 
 let
   # Flake output for Linux rebuilds: fixed on WSL, otherwise Steam Deck or by architecture
   linuxTarget =
-    if isWsl
-    then "wsl"
-    else ''$([ "$USER" = "deck" ] && echo steamdeck || echo $(uname -m)-linux)'';
+    if isWsl then "wsl" else ''$([ "$USER" = "deck" ] && echo steamdeck || echo $(uname -m)-linux)'';
 in
 {
   # Modern tool replacements
@@ -52,7 +55,7 @@ in
 
   # System monitoring
   top = "htop";
-  sys = "btop";  # Podman
+  sys = "btop"; # Podman
   p = "podman";
   pc = "podman compose";
   pps = "podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'";
@@ -112,7 +115,8 @@ in
   # Config editing
   zshrc = "nvim ~/.zshrc";
   reload = "source ~/.zshrc";
-} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+}
+// lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
   # macOS-specific aliases
   copy = "pbcopy";
   paste = "pbpaste";
@@ -122,7 +126,8 @@ in
   nix-init = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" nix --extra-experimental-features 'nix-command flakes' run nix-darwin -- switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
   nix-rebuild = "sudo NOMINIX_USER=\"$NOMINIX_USER\" NOMINIX_FULLNAME=\"$NOMINIX_FULLNAME\" NOMINIX_EMAIL=\"$NOMINIX_EMAIL\" darwin-rebuild switch --impure --flake ~/dotfiles-nix#aarch64-darwin";
   nix-update = "nix flake update && sudo darwin-rebuild switch --flake .#aarch64-darwin";
-} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+}
+// lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
   # Linux-specific aliases
   ports = "ss -tuln";
 
@@ -131,13 +136,15 @@ in
   nix-init = "nix run home-manager/master -- switch --impure --flake ~/dotfiles-nix#${linuxTarget}";
   nix-rebuild = "home-manager switch --impure --flake ~/dotfiles-nix#${linuxTarget}";
   nix-update = "nix flake update && home-manager switch --flake .#${linuxTarget}";
-} // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && !isWsl) {
+}
+// lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && !isWsl) {
   copy = "xclip -selection clipboard";
   paste = "xclip -selection clipboard -o";
 
   # OpenGL wrapper for GUI apps on non-NixOS
   ghostty = "nixGL ghostty";
-} // lib.optionalAttrs isWsl {
+}
+// lib.optionalAttrs isWsl {
   # Windows clipboard and default apps
   copy = "clip.exe";
   paste = "powershell.exe -NoProfile -Command Get-Clipboard | tr -d '\\r'";

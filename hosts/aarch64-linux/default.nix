@@ -1,4 +1,10 @@
-{ config, pkgs, lib, user, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  user,
+  ...
+}:
 
 {
   home = {
@@ -15,11 +21,14 @@
   ];
 
   # Reduced LSP support for resource-constrained devices
-  programs.neovim.extraPackages = lib.mkForce (with pkgs; [
-    lua-language-server
-    pyright
-    nil
-    stylua
-    shellcheck
-  ]);
+  programs.neovim.extraPackages = lib.mkForce (
+    with pkgs;
+    [
+      lua-language-server
+      pyright
+      nil
+      stylua
+      shellcheck
+    ]
+  );
 }
