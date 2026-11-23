@@ -32,6 +32,22 @@
   # Enable zsh as system shell
   programs.zsh.enable = true;
 
+  # Authenticate `sudo` with Touch ID instead of typing a password. nix-darwin
+  # manages /etc/pam.d/sudo_local, which Apple keeps across OS updates — unlike
+  # editing /etc/pam.d/sudo directly, which every major update reverts.
+  #
+  # reattach loads pam_reattach, which forwards the request to the GUI login
+  # session. Without it Touch ID silently falls back to a password prompt inside
+  # tmux (terminal/tmux.nix), which is where most of these sudos get typed.
+  #
+  # NOTE: this does NOT let Claude Code run `nix-rebuild` — sudo still needs a
+  # controlling terminal to prompt on, and session commands have none. See
+  # CLAUDE.md; nix-rebuild stays a run-it-yourself command.
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
+  };
+
   # Set Git commit hash for darwin-version
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
 
