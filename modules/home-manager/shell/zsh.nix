@@ -272,6 +272,9 @@ in
           # Android SDK
           export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
           export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
+
+          # Rancher Desktop's docker, nerdctl and rdctl
+          [ -d "$HOME/.rd/bin" ] && export PATH="$HOME/.rd/bin:$PATH"
         ''}
 
         ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
