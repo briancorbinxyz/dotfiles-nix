@@ -1,4 +1,11 @@
-{ config, pkgs, lib, inputs, user, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  user,
+  ...
+}:
 
 {
   system.stateVersion = 5;
@@ -9,7 +16,10 @@
   nix = {
     settings = {
       experimental-features = "nix-command flakes";
-      trusted-users = [ "root" user.name ];
+      trusted-users = [
+        "root"
+        user.name
+      ];
     };
   };
 
