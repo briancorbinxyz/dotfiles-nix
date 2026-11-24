@@ -14,6 +14,7 @@
     ./codex.nix
     ./direnv.nix
     ./fzf.nix
+    ./gradle.nix
     ./llama.nix
     ./opencode.nix
     ./fnm.nix

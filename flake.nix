@@ -175,6 +175,11 @@
         system:
         let
           pkgs = pkgsFor system;
+
+          # Shared with the Gradle toolchain registry in
+          # home-manager/tools/gradle.nix — see there for why Temurin and why
+          # this particular set of versions.
+          jdks = import ./modules/jdks.nix pkgs;
         in
         {
           default = pkgs.mkShell {
@@ -182,6 +187,47 @@
               git
               nixfmt
             ];
+          };
+
+          # Java/Gradle repos: mutastic, mutastic-spike, mutastic-codex-try,
+          # mutastic-gate-try, mutastic-gate-spike.
+          #
+          # Only the primary JDK goes on PATH here. Gradle finds the *other*
+          # five through org.gradle.java.installations.paths in
+          # ~/.gradle/gradle.properties, which home-manager writes and which
+          # works machine-wide without a devShell — so this shell exists to
+          # give `java`, `javac` and `mvn` a definite version, not to feed the
+          # toolchain resolver.
+          #
+          # No gradle here on purpose. All five repos pin Gradle 9.2.1 through
+          # ./gradlew, and nixpkgs has 8.14.6 — putting that on PATH would only
+          # invite running the wrong one. The wrapper needs a JDK, not a Gradle.
+          mutastic-java = pkgs.mkShell {
+            packages = [
+              jdks.primary
+              pkgs.maven
+            ];
+
+            JAVA_HOME = jdks.primary.home;
+          };
+
+          # Rust repos: mutastic-rs and the rs-spike variants. No
+          # rust-toolchain.toml anywhere and no native dependencies, so plain
+          # stable is enough — nixpkgs has 1.99.0 against a 1.91 floor and
+          # edition 2024.
+          mutastic-rust = pkgs.mkShell {
+            packages = with pkgs; [
+              rustc
+              cargo
+              clippy
+              rustfmt
+            ];
+          };
+
+          # mutastic.io. package-lock.json and no engines field, so npm at
+          # whatever nixpkgs pins (24.21.0) rather than a version guess.
+          mutastic-node = pkgs.mkShell {
+            packages = with pkgs; [ nodejs ];
           };
         }
       );
